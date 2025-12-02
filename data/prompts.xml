@@ -83,4 +83,47 @@ TYPE 10 — 부사적: 결과(only to) (정답: only <u>to~</u> 또는 결과 �
             ]]>
         </Content>
     </prompt>
+    <prompt>
+        <Chapter>1</Chapter>
+        <Type>부정사는 용법이지</Type>
+        <Difficulty>높음</Difficulty>
+        <Content>
+            <![CDATA[
+            (마스터 난이도에서도 동일한 문법 정의/TYPE 규칙을 사용하며, 고급 문장 난도만 상향 적용합니다.)
+
+            ============================================
+🟪 SECTION C — to부정사 문법 정의(압축)
+============================================
+🟦 I. 명사적 용법
+- 주어: <u>To understand</u> the rule is important. / It is important <u>to understand</u> the rule
+- 목적어: She wants <u>to improve</u> her skills.
+- 보어: Their goal is <u>to finish</u> early.
+
+🟧 II. 형용사적 용법
+- 명사 수식: a place <u>to study</u>, a tool <u>to cut with</u>
+- 오류 예: a place <u>to visit to</u> (잘못된 전치사)
+
+🟥 III. 부사적 용법 (5종)
+1) 목적: She left early <u>to prepare</u>.
+2) 감정의 원인: She was relieved <u>to find</u> her passport.
+3) 판단의 근거: He was brave <u>to attempt</u> the climb.
+4) 형용사·부사 수식: too heavy <u>to lift</u>, clear enough <u>to understand</u>
+5) 결과: Jason lived <u>to be</u> one hundred years old. / She hurried, only <u>to drop</u> everything.
+
+============================================
+🟩 SECTION D — 문제 유형(Type) 10개
+============================================
+TYPE 1 — 명사적: 주어 (정답: 주어 위치 <u>to~</u>; 오답: 부사/형용사/다른 명사 용법)
+TYPE 2 — 명사적: 보어 (정답: be동사 + <u>to~</u>; 오답: 목적/감정/판단/결과)
+TYPE 3 — 명사적: 목적어 (정답: 동사 + <u>to~</u>; 오답: 명사 주어/보어, 모든 부사/형용사 용법)
+TYPE 4 — 형용사적 (정답: 명사 + <u>to~</u>; 오답: 목적/감정/판단/결과/too·enough 수식)
+TYPE 5 — 형용사적 오류 찾기 (정답: 전치사 오류 포함 명사+to부정사; 오답: 정상 명사+to부정사)
+TYPE 6 — 부사적: 목적 (정답: "~하기 위해"; 오답: 목적 외)
+TYPE 7 — 부사적: 감정의 원인 (정답: 감정 형용사 + <u>to~</u>; 오답: 목적/판단/형용사수식/결과)
+TYPE 8 — 부사적: 판단의 근거 (정답: 판단 형용사 + <u>to~</u>; 오답: 목적/감정/결과/형용사수식)
+TYPE 9 — 부사적: 형용사·부사 수식(too/enough) (정답: too/enough + 형용사 + <u>to~</u>; 오답: 목적/감정/판단/결과)
+TYPE 10 — 부사적: 결과(only to) (정답: only <u>to~</u> 또는 결과 구조; 오답: 목적/감정/판단/형용사 수식)
+            ]]>
+        </Content>
+    </prompt>
 </prompts>
