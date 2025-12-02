@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './styles/index.css';
+@import './styles/style.css';
+@import './styles/TaskSetPage.css';
+@import './styles/ChapterCard.css';
+@import './styles/TypeCard.css';
+@import './styles/DiffCard.css';
+@import './styles/YoutubeFrame.css';
+@import './styles/GrammarToast.css';
+@import './styles/Header.css';
+@import './styles/LoadingOverlay.css';
+@import './styles/TestHeader.css';
+@import './styles/QuestionComponent.css';
+@import './styles/OnCheck.css';
+@import './styles/QuitBottomSheet.css';
+@import './styles/ReBottomSheet.css';
+@import './styles/ResultPage.css';
+@import './styles/TestPage.css';
+@import './styles/LandingPage.css';
+@import './styles/error.css';

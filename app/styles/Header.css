@@ -1,0 +1,13 @@
+.header {
+    text-align: center;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.header__logo {
+    height: 30px;
+    width: 139.3px;
+    margin : 9 17 9 0px; 
+    object-fit: cover;
+}
+

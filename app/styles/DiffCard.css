@@ -1,0 +1,64 @@
+.diffs {
+    display: flex;
+    justify-content: center; 
+    flex-direction: column;
+    align-items: start;
+    max-width: 948px;
+    margin: 18px;
+    gap: 12px; /* 각 요소 간의 간격을 균일하게 조정 (선택 사항) */
+}
+
+.diff-card {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 56px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: 1px solid #F6F6F6;
+    font-size: 14px;
+    color: #555555;
+    padding: 16px 20px;
+    align-items: center;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.06);
+}
+
+.diff-content {
+    display: flex;
+    align-items: center;
+}
+
+.diff-card.onSelected {
+    background-color: rgba(230, 96, 65, 0.06);
+    color: #E66041;
+    border: 1.5px solid #E66041;
+}
+
+.diff-icon {
+    width: auto;
+    height: 18px;
+    margin-left: 8px;
+}
+
+.diff-intro {
+    font-size: 13px;
+    color: #555555;
+    margin-right: 8px;  
+    padding: 4px 8px;
+    border-radius: 30px;
+}
+
+.diff-intro.낮음 {
+    background-color: #FFF0D7;
+    color: #FF9000;
+}
+
+.diff-intro.보통 {
+    background-color: #FFECDF;
+    color: #FF7719;
+}
+
+.diff-intro.높음 {
+    background-color: #FFE5DF;
+    color: #E66041;
+}

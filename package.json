@@ -1,0 +1,33 @@
+{
+  "name": "grammarpt",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.86.0",
+    "bcryptjs": "^3.0.3",
+    "fast-xml-parser": "^4.5.1",
+    "html2canvas": "^1.4.1",
+    "js-yaml": "^4.1.0",
+    "lottie-react": "^2.4.0",
+    "next": "14.2.13",
+    "openai": "^4.78.1",
+    "prop-types": "^15.8.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-toastify": "^10.0.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.13",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
+  }
+}

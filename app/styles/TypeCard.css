@@ -1,0 +1,29 @@
+.types {
+    display: flex;
+    flex-direction: row; /* 기본적으로 가로로 정렬되도록 설정 */
+    flex-wrap: wrap; /* 한 줄에 가득 차면 다음 줄로 이동하도록 설정 */
+    justify-content: flex-start; /* 한 줄 내에서 왼쪽 정렬 */
+    align-items: start;
+    max-width: 948px;
+    margin: 18px;
+    gap: 12px; /* 각 요소 간의 간격을 균일하게 조정 (선택 사항) */
+}
+
+.type-card {
+    width: auto;
+    height: 39px;
+    border-radius: 7px;
+    background-color: #ffffff;
+    border: 1px solid #555555;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555555;
+    padding: 8px 16px;
+}
+
+.type-card.onSelected {
+    background-color: rgba(230, 96, 65, 0.06);
+    color: #E66041;
+    border: 1px solid #E66041;
+    color: #E66041;
+}

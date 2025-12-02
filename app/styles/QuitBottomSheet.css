@@ -1,0 +1,76 @@
+.quit-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
+    z-index: 1000;
+}
+
+.quit-bottom-sheet-content {
+    background-color: white;
+    padding: 26px 24px 33px 24px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.quit-bottom-sheet-content h2 {
+    margin-bottom: 7px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'SUIT';
+    color: #333333;
+}
+
+.quit-bottom-sheet-content p {
+    margin-bottom: 40px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #767676;
+    font-family: 'SUIT';
+}
+
+.quit-bottom-sheet-content button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.button-container button {
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.quit-button {
+    background-color: #E66041;
+    color: white;
+    font-family: 'SUIT';
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.close-button {
+    background-color: #f2f2f2;
+    color: #555555;
+    font-family: 'SUIT';
+    font-weight: 600;
+    border-radius: 8px;
+}

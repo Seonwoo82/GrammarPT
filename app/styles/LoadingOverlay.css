@@ -1,0 +1,89 @@
+.loading-overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    margin-top: 56px;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.loading-anim {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 56px;
+    width: 100%;
+    height: auto;
+}
+
+.loading-anim-lottie {
+    height: 58px;
+}
+
+.loading-text {
+    text-align: center;
+    color: #E66041;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 13px;
+}
+
+.loading-title {
+    color: #333333;
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 16px;
+}
+
+.loading-progress-container {
+    width: 187px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+    margin-top: 46px;
+}
+.loading-progress-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+.loading-progress-check p {
+    color: #333333;
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 12px;
+    word-spacing: 0.1px;
+}
+.loading-progress-check.second {
+    margin-top: 40px;
+}
+.loading-progress-check.second p {
+    color: #767676;
+}
+
+.loading-progress-check.second.ongoing p {
+    color: #333333;
+} 
+.loading-progress-img {
+    width: 24px;
+    height: 24px;
+}
+
+.stop-container {
+    margin-top: 82px;
+}
+.stop-button {
+    width: 150px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #F2F2F2;
+    color: #727272;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+}

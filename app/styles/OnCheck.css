@@ -1,0 +1,27 @@
+.oncheck-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.oncheck-logo {
+    margin-top: 176px;
+    width: 220px;
+    height: 220px;
+}
+.oncheck-text-container {
+    text-align: center;
+}
+.oncheck-text-title {
+    margin-top: -10px;
+    color: #000;
+    font-size: 24px;
+    font-weight: 700;
+}
+.oncheck-text {
+    margin-top: 15px;
+    color: #767676;
+    font-size: 14px;
+    font-weight: 400;
+}

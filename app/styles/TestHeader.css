@@ -1,0 +1,35 @@
+.test-header-container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 16px 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quit-section {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.header_quit {
+    height: 24px;
+    width: 24px;
+    margin-right: 8px;
+    object-fit: cover;
+}
+
+.timer {
+    margin-left: auto;
+    background-color: rgba(230, 96, 65,0.06);
+    line-height: 1.5;
+    font-weight: 600;
+    color: #E66041;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
