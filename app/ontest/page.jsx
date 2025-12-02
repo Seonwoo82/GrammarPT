@@ -23,7 +23,7 @@ export default function TestPage() {
 
   useEffect(() => {
     if (!questions || !Array.isArray(questions)) {
-      router.replace("/");
+      router.replace("/error");
       return;
     }
 

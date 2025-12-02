@@ -113,7 +113,7 @@ export default function ResultPage() {
 
   useEffect(() => {
     if (!questions || !results || !selectedAnswers || !testInfo) {
-      router.replace("/");
+      router.replace("/error");
       return;
     }
 
