@@ -90,9 +90,13 @@ async function getGptResponse(prompt) {
     throw new Error("OPENAI_API_KEY가 설정되지 않았습니다.");
   }
 
-  const model = process.env.OPENAI_MODEL?.trim() || "gpt-5-nano-2025-08-07";
-  const reasoningEffort = process.env.OPENAI_REASONING_EFFORT?.trim() || "medium";
-  const textVerbosity = process.env.OPENAI_TEXT_VERBOSITY?.trim() || "high";
+  // Fast model defaults: override via env if needed
+  const model =
+    process.env.OPENAI_MODEL?.trim() ||
+    process.env.OPENAI_FAST_MODEL?.trim() ||
+    "gpt-4o-mini-2024-07-18";
+  const reasoningEffort = process.env.OPENAI_REASONING_EFFORT?.trim() || "low";
+  const textVerbosity = process.env.OPENAI_TEXT_VERBOSITY?.trim() || "medium";
   const apiStart = Date.now();
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
