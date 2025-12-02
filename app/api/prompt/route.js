@@ -94,16 +94,23 @@ async function getGptResponse(prompt) {
   const model =
     process.env.OPENAI_MODEL?.trim() ||
     process.env.OPENAI_FAST_MODEL?.trim() ||
-    "gpt-4o-mini-2024-07-18";
+    "gpt-5.1";
+  const reasoningEffort = process.env.OPENAI_REASONING_EFFORT?.trim();
+  const textVerbosity = process.env.OPENAI_TEXT_VERBOSITY?.trim();
   const apiStart = Date.now();
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  const response = await client.responses.create({
-    model,
-    input: prompt,
-  });
+  const requestBody = { model, input: prompt };
+  if (reasoningEffort) {
+    requestBody.reasoning = { effort: reasoningEffort };
+  }
+  if (textVerbosity) {
+    requestBody.text = { verbosity: textVerbosity };
+  }
+
+  const response = await client.responses.create(requestBody);
   logDuration("OpenAI responses.create", apiStart);
 
   let fallbackText = "";
