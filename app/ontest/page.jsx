@@ -28,7 +28,11 @@ export default function TestPage() {
         isArray: Array.isArray(questions),
         sessionId,
       });
-      router.replace("/error");
+      if (!sessionId) {
+        router.replace("/");
+      } else {
+        router.replace("/error");
+      }
       return;
     }
 
