@@ -58,18 +58,22 @@ export default function ResultPage() {
   const imgSaveAreaRef = useRef(null);
   const captureAreaRef = useRef(null);
 
+  const sanitizeText = (text = "") =>
+    String(text || "").replace(/<br\s*\/?>/gi, " ").replace(/\*\*/g, "");
+
   const renderOptionText = (text) => {
-    if (text.includes("<u>")) {
+    const clean = sanitizeText(text);
+    if (clean.includes("<u>")) {
       return (
         <span
           dangerouslySetInnerHTML={{
-            __html: text,
+            __html: clean,
           }}
           className="underlined-text"
         />
       );
     }
-    return text;
+    return clean;
   };
 
   const handleSaveResult = () => {
@@ -177,7 +181,7 @@ export default function ResultPage() {
       setCompleteSent(true);
     }
 
-    const iconIndex = Math.min(correct, 5);
+    const iconIndex = Math.min(correct, assets.faceIcons.length - 1);
     setFaceIcon(assets.faceIcons[iconIndex]);
     setResultIcon(assets.resultIcons[iconIndex]);
   }, [questions, results, selectedAnswers, testInfo, router, sessionId, sessionStartedAt, completeSent]);
@@ -289,7 +293,7 @@ export default function ResultPage() {
           </div>
           <div className="result-page-mid-content">
             <div className="result-page-mid-content-left">
-              <span>정답 {correctCount} / 5</span>
+              <span>정답 {correctCount} / {questions.length}</span>
             </div>
             <div className="result-page-mid-content-right" onClick={handleSaveResult} role="button" tabIndex={0}>
               <span>

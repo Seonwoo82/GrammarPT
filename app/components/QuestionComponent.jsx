@@ -24,7 +24,7 @@ export default function QuestionComponent({ question, selectedAnswer, onAnswerSe
       <div className="question-title">
         <h2>
           Q{question.index}
-          <span>/5</span>
+          <span>/10</span>
         </h2>
       </div>
 
