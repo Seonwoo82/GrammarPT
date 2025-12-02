@@ -1,18 +1,22 @@
 "use client";
 
 export default function QuestionComponent({ question, selectedAnswer, onAnswerSelect }) {
-  const renderOptionText = (text) => {
-    if (text.includes("<u>")) {
+  const sanitizeText = (text = "") =>
+    text.replace(/<br\s*\/?>/gi, " ").replace(/\*\*/g, "");
+
+  const renderOptionText = (text = "") => {
+    const clean = sanitizeText(text);
+    if (clean.includes("<u>")) {
       return (
         <span
           dangerouslySetInnerHTML={{
-            __html: text,
+            __html: clean,
           }}
           className="underlined-text"
         />
       );
     }
-    return text;
+    return clean;
   };
 
   return (
