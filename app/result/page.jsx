@@ -360,10 +360,12 @@ export default function ResultPage() {
                     })}
                   </div>
 
-                  <div className="vocabulary-container">
-                    <p className="vocabulary-title">어휘 설명</p>
-                    <p className="vocabulary-content">{renderOptionText(question.vocabulary || "")}</p>
-                  </div>
+                  {question.vocabulary && typeof question.vocabulary === "string" && question.vocabulary.trim() !== "" && (
+                    <div className="vocabulary-container">
+                      <p className="vocabulary-title">어휘 설명</p>
+                      <p className="vocabulary-content">{renderOptionText(question.vocabulary)}</p>
+                    </div>
+                  )}
                   <div className="explanation-container">
                     <div className="explanation-container-left-border"></div>
                     <p className="explanation-title">문제 해설</p>
