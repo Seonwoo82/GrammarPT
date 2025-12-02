@@ -95,8 +95,6 @@ async function getGptResponse(prompt) {
     process.env.OPENAI_MODEL?.trim() ||
     process.env.OPENAI_FAST_MODEL?.trim() ||
     "gpt-4o-mini-2024-07-18";
-  const reasoningEffort = process.env.OPENAI_REASONING_EFFORT?.trim() || "low";
-  const textVerbosity = process.env.OPENAI_TEXT_VERBOSITY?.trim() || "medium";
   const apiStart = Date.now();
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -105,8 +103,6 @@ async function getGptResponse(prompt) {
   const response = await client.responses.create({
     model,
     input: prompt,
-    ...(reasoningEffort ? { reasoning: { effort: reasoningEffort } } : {}),
-    ...(textVerbosity ? { text: { verbosity: textVerbosity } } : {}),
   });
   logDuration("OpenAI responses.create", apiStart);
 
