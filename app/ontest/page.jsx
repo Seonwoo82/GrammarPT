@@ -23,6 +23,11 @@ export default function TestPage() {
 
   useEffect(() => {
     if (!questions || !Array.isArray(questions)) {
+      console.warn("[ontest] no questions found, redirecting to /error", {
+        hasQuestions: Boolean(questions),
+        isArray: Array.isArray(questions),
+        sessionId,
+      });
       router.replace("/error");
       return;
     }

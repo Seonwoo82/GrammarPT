@@ -191,6 +191,12 @@ export default function ResultPage() {
   }
 
   const handleConfirmRetry = () => {
+    console.log("[result] retry clicked", {
+      questionsLength: questions?.length,
+      hasResults: Boolean(results),
+      hasSelected: Boolean(selectedAnswers),
+      sessionId,
+    });
     const newSessionId = createSessionId();
     const startedAt = Date.now();
     setSession({
