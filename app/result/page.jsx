@@ -200,8 +200,10 @@ export default function ResultPage() {
     const newSessionId = createSessionId();
     const startedAt = Date.now();
     setSession({
+      questions: questions || [],
+      testInfo: testInfo || null,
       results: null,
-      selectedAnswers: new Array(questions.length).fill(null),
+      selectedAnswers: new Array((questions || []).length).fill(null),
       sessionId: newSessionId,
       sessionStartedAt: startedAt,
     });
@@ -224,7 +226,8 @@ export default function ResultPage() {
       },
     });
     setShowReSheet(false);
-    router.push("/ontest");
+    // ensure state is updated before navigation
+    setTimeout(() => router.push("/ontest"), 0);
   };
 
   const handleConfirmQuit = () => {
