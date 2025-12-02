@@ -91,7 +91,7 @@ async function getGptResponse(prompt) {
   }
 
   const model = process.env.OPENAI_MODEL?.trim() || "gpt-5-nano-2025-08-07";
-  const reasoningEffort = process.env.OPENAI_REASONING_EFFORT?.trim() || "low";
+  const reasoningEffort = process.env.OPENAI_REASONING_EFFORT?.trim() || "medium";
   const textVerbosity = process.env.OPENAI_TEXT_VERBOSITY?.trim() || "high";
   const apiStart = Date.now();
   const client = new OpenAI({

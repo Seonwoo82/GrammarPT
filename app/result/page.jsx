@@ -99,6 +99,11 @@ export default function ResultPage() {
         sessionId,
         metadata: { channel: "download", type: "result_image" },
       });
+      sendTelemetry({
+        eventType: "feature_used",
+        sessionId,
+        metadata: { feature: "save_result" },
+      });
     }
   };
 
@@ -189,6 +194,11 @@ export default function ResultPage() {
       selectedAnswers: new Array(questions.length).fill(null),
       sessionId: newSessionId,
       sessionStartedAt: startedAt,
+    });
+    sendTelemetry({
+      eventType: "feature_used",
+      sessionId,
+      metadata: { feature: "retry" },
     });
     sendTelemetry({
       eventType: "session_start",

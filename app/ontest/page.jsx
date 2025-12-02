@@ -16,6 +16,7 @@ export default function TestPage() {
   const { questions, testInfo, setSession, sessionId, sessionStartedAt } = useTestSession();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
+  const [answerMeta, setAnswerMeta] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showOnCheck, setShowOnCheck] = useState(false);
   const [questionStartAt, setQuestionStartAt] = useState(Date.now());
@@ -27,6 +28,12 @@ export default function TestPage() {
     }
 
     setSelectedAnswers(new Array(questions.length).fill(null));
+    setAnswerMeta(new Array(questions.length).fill(null).map(() => ({
+      firstSelectedAt: null,
+      lastSelectedAt: null,
+      firstAnswer: null,
+      changed: false,
+    })));
     setIsLoading(false);
   }, [questions, router]);
 
@@ -54,6 +61,8 @@ export default function TestPage() {
       if (!question || !answer || !sessionId) return;
 
       const durationMs = Math.max(0, Date.now() - questionStartAt);
+      const meta = answerMeta?.[questionIdx] || {};
+      const dwellMs = meta.lastSelectedAt && meta.firstSelectedAt ? Math.max(0, meta.lastSelectedAt - meta.firstSelectedAt) : null;
 
       sendTelemetry({
         eventType: "question_answered",
@@ -69,10 +78,43 @@ export default function TestPage() {
           chapter: testInfo?.chapter,
           type: testInfo?.type,
           difficulty: testInfo?.difficulty,
+          first_answer: meta.firstAnswer,
+          first_selected_at: meta.firstSelectedAt ? new Date(meta.firstSelectedAt).toISOString() : undefined,
+          last_selected_at: meta.lastSelectedAt ? new Date(meta.lastSelectedAt).toISOString() : undefined,
+          dwell_ms: dwellMs,
         },
       });
+
+      sendTelemetry({
+        eventType: "self_correction",
+        sessionId,
+        metadata: {
+          question_index: question.index ?? questionIdx + 1,
+          changed_before_submit: Boolean(meta.changed),
+          first_answer: meta.firstAnswer,
+          final_answer: answer,
+          correction_duration_ms: dwellMs,
+          total_questions: questions.length,
+          chapter: testInfo?.chapter,
+          type: testInfo?.type,
+          difficulty: testInfo?.difficulty,
+        },
+      });
+      if (meta.changed && dwellMs != null) {
+        sendTelemetry({
+          eventType: "correction_duration",
+          sessionId,
+          metadata: {
+            question_index: question.index ?? questionIdx + 1,
+            duration_ms: dwellMs,
+            chapter: testInfo?.chapter,
+            type: testInfo?.type,
+            difficulty: testInfo?.difficulty,
+          },
+        });
+      }
     },
-    [currentQuestionIndex, questionStartAt, questions, selectedAnswers, sessionId, testInfo]
+    [answerMeta, currentQuestionIndex, questionStartAt, questions, selectedAnswers, sessionId, testInfo]
   );
 
   const handleNext = () => {
@@ -90,6 +132,20 @@ export default function TestPage() {
       const newAnswers = [...prev];
       newAnswers[currentQuestionIndex] = answer;
       return newAnswers;
+    });
+    setAnswerMeta((prev) => {
+      const now = Date.now();
+      const meta = [...prev];
+      const current = { ...(meta[currentQuestionIndex] || {}) };
+      if (!current.firstSelectedAt) {
+        current.firstSelectedAt = now;
+        current.firstAnswer = answer;
+      } else if (current.firstAnswer && current.firstAnswer !== answer) {
+        current.changed = true;
+      }
+      current.lastSelectedAt = now;
+      meta[currentQuestionIndex] = current;
+      return meta;
     });
   };
 

@@ -107,19 +107,6 @@ export default function BackofficeDashboard() {
   const effort = useMemo(() => (data?.effortUplift || []).slice(0, 5), [data]);
   const features = useMemo(() => (data?.featureStickiness || []).slice(0, 5), [data]);
   const selfCorr = useMemo(() => (data?.selfCorrection || []).slice(0, 5), [data]);
-  const cohort = useMemo(() => {
-    if (!data?.cohortRetention) return [];
-    const map = new Map();
-    data.cohortRetention.forEach(item => {
-      const k = `${item.cohort_week}-${item.grade}`;
-      if (!map.has(k)) map.set(k, { cohort_week: item.cohort_week, grade: item.grade, w4: "-", w8: "-" });
-      const e = map.get(k);
-      const r = item.active_users ? item.retained_users / item.active_users : 0;
-      if (item.week_offset === 4) e.w4 = pct(r);
-      if (item.week_offset === 8) e.w8 = pct(r);
-    });
-    return Array.from(map.values()).sort((a, b) => b.cohort_week - a.cohort_week).slice(0, 6);
-  }, [data]);
 
   const dauWau = snap?.dau_wau_ratio ? snap.dau_wau_ratio * 100 : 0;
   const wauMau = snap?.wau_mau_ratio ? snap.wau_mau_ratio * 100 : 0;
@@ -281,34 +268,38 @@ export default function BackofficeDashboard() {
           <div style={styles.chartCard}>
             <div style={styles.chartTitle}>공유율</div>
             <div style={styles.chartSub}>유기적 공유 비율 추이</div>
-            <div style={styles.lineChartContainer}>
-              <svg width="100%" height="140" viewBox="0 0 300 140" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="shareGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#E66041" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#E66041" stopOpacity="0.05" />
-                  </linearGradient>
-                </defs>
-                {shareData.length > 0 && (() => {
-                  const max = Math.max(...shareData) || 1;
-                  const min = Math.min(...shareData);
-                  const range = max - min || 1;
-                  const pts = shareData.map((v, i) => ({
-                    x: 20 + (i / Math.max(shareData.length - 1, 1)) * 260,
-                    y: 20 + (1 - (v - min) / range) * 100
-                  }));
-                  const line = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-                  const area = `${line} L ${pts[pts.length-1].x} 120 L ${pts[0].x} 120 Z`;
-                  return (
-                    <>
-                      <path d={area} fill="url(#shareGrad)" />
-                      <path d={line} fill="none" stroke="#E66041" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                      {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="5" fill="#fff" stroke="#E66041" strokeWidth="2.5" />)}
-                    </>
-                  );
-                })()}
-              </svg>
-            </div>
+            {shareData.length === 0 ? (
+              <div style={styles.emptyBox}>수집이 현재 불가능한 지표입니다.</div>
+            ) : (
+              <div style={styles.lineChartContainer}>
+                <svg width="100%" height="140" viewBox="0 0 300 140" preserveAspectRatio="xMidYMid meet">
+                  <defs>
+                    <linearGradient id="shareGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#E66041" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#E66041" stopOpacity="0.05" />
+                    </linearGradient>
+                  </defs>
+                  {shareData.length > 0 && (() => {
+                    const max = Math.max(...shareData) || 1;
+                    const min = Math.min(...shareData);
+                    const range = max - min || 1;
+                    const pts = shareData.map((v, i) => ({
+                      x: 20 + (i / Math.max(shareData.length - 1, 1)) * 260,
+                      y: 20 + (1 - (v - min) / range) * 100
+                    }));
+                    const line = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+                    const area = `${line} L ${pts[pts.length-1].x} 120 L ${pts[0].x} 120 Z`;
+                    return (
+                      <>
+                        <path d={area} fill="url(#shareGrad)" />
+                        <path d={line} fill="none" stroke="#E66041" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                        {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="5" fill="#fff" stroke="#E66041" strokeWidth="2.5" />)}
+                      </>
+                    );
+                  })()}
+                </svg>
+              </div>
+            )}
           </div>
         </div>
 
@@ -366,24 +357,30 @@ export default function BackofficeDashboard() {
                 <div style={styles.chartTitle}>자발적 재사용</div>
                 <div style={styles.chartSub}>사용자 주도 세션 비율</div>
               </div>
-              <div style={styles.bigStat}>
-                <div style={{...styles.bigStatValue, color: '#E66041'}}>{pct(voluntary[0]?.voluntary_ratio)}</div>
-                <div style={styles.bigStatLabel}>최근 주</div>
-              </div>
-            </div>
-            <div style={styles.progressList}>
-              {voluntary.map((r, i) => (
-                <div key={i} style={styles.progressItem}>
-                  <span style={styles.progressLabel}>{dateFmt(r.week_start)}</span>
-                  <div style={styles.progressBarBg}>
-                    <div style={{...styles.progressBarFill, width: `${(r.voluntary_ratio||0)*100}%`, background: 'linear-gradient(90deg, #E66041, #F08A6E)'}}>
-                      <span style={styles.progressBarText}>{fmt.format(r.voluntary_sessions||0)} / {fmt.format(r.total_sessions||0)}</span>
-                    </div>
-                  </div>
-                  <span style={{...styles.progressPercent, color: '#E66041'}}>{pct(r.voluntary_ratio)}</span>
+              {voluntary.length > 0 && (
+                <div style={styles.bigStat}>
+                  <div style={{...styles.bigStatValue, color: '#E66041'}}>{pct(voluntary[0]?.voluntary_ratio)}</div>
+                  <div style={styles.bigStatLabel}>최근 주</div>
                 </div>
-              ))}
+              )}
             </div>
+            {voluntary.length === 0 ? (
+              <div style={styles.emptyBox}>수집이 현재 불가능한 지표입니다.</div>
+            ) : (
+              <div style={styles.progressList}>
+                {voluntary.map((r, i) => (
+                  <div key={i} style={styles.progressItem}>
+                    <span style={styles.progressLabel}>{dateFmt(r.week_start)}</span>
+                    <div style={styles.progressBarBg}>
+                      <div style={{...styles.progressBarFill, width: `${(r.voluntary_ratio||0)*100}%`, background: 'linear-gradient(90deg, #E66041, #F08A6E)'}}>
+                        <span style={styles.progressBarText}>{fmt.format(r.voluntary_sessions||0)} / {fmt.format(r.total_sessions||0)}</span>
+                      </div>
+                    </div>
+                    <span style={{...styles.progressPercent, color: '#E66041'}}>{pct(r.voluntary_ratio)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div style={styles.progressCard}>
@@ -392,24 +389,30 @@ export default function BackofficeDashboard() {
                 <div style={styles.chartTitle}>노력 상승률</div>
                 <div style={styles.chartSub}>학습 강도 증가 사용자</div>
               </div>
-              <div style={styles.bigStat}>
-                <div style={{...styles.bigStatValue, color: '#F08A6E'}}>{pct(effort[0]?.uplift_ratio)}</div>
-                <div style={styles.bigStatLabel}>최근 주</div>
-              </div>
-            </div>
-            <div style={styles.progressList}>
-              {effort.map((r, i) => (
-                <div key={i} style={styles.progressItem}>
-                  <span style={styles.progressLabel}>{dateFmt(r.week_start)}</span>
-                  <div style={styles.progressBarBg}>
-                    <div style={{...styles.progressBarFill, width: `${(r.uplift_ratio||0)*100}%`, background: 'linear-gradient(90deg, #F08A6E, #F5A88E)'}}>
-                      <span style={styles.progressBarText}>{fmt.format(r.uplift_users||0)} / {fmt.format(r.total_users||0)}</span>
-                    </div>
-                  </div>
-                  <span style={{...styles.progressPercent, color: '#F08A6E'}}>{pct(r.uplift_ratio)}</span>
+              {effort.length > 0 && (
+                <div style={styles.bigStat}>
+                  <div style={{...styles.bigStatValue, color: '#F08A6E'}}>{pct(effort[0]?.uplift_ratio)}</div>
+                  <div style={styles.bigStatLabel}>최근 주</div>
                 </div>
-              ))}
+              )}
             </div>
+            {effort.length === 0 ? (
+              <div style={styles.emptyBox}>수집이 현재 불가능한 지표입니다.</div>
+            ) : (
+              <div style={styles.progressList}>
+                {effort.map((r, i) => (
+                  <div key={i} style={styles.progressItem}>
+                    <span style={styles.progressLabel}>{dateFmt(r.week_start)}</span>
+                    <div style={styles.progressBarBg}>
+                      <div style={{...styles.progressBarFill, width: `${(r.uplift_ratio||0)*100}%`, background: 'linear-gradient(90deg, #F08A6E, #F5A88E)'}}>
+                        <span style={styles.progressBarText}>{fmt.format(r.uplift_users||0)} / {fmt.format(r.total_users||0)}</span>
+                      </div>
+                    </div>
+                    <span style={{...styles.progressPercent, color: '#F08A6E'}}>{pct(r.uplift_ratio)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -420,26 +423,30 @@ export default function BackofficeDashboard() {
               <div style={styles.chartTitle}>기능 고착도</div>
               <div style={styles.chartSub}>기능별 DAU 점유율</div>
             </div>
-            <table style={styles.table}>
-              <thead>
-                <tr>
-                  <th style={styles.th}>날짜</th>
-                  <th style={styles.th}>기능</th>
-                  <th style={styles.th}>고착도</th>
-                  <th style={styles.th}>DAU</th>
-                </tr>
-              </thead>
-              <tbody>
-                {features.map((r, i) => (
-                  <tr key={i} style={styles.tr}>
-                    <td style={styles.td}>{dateFmt(r.usage_date)}</td>
-                    <td style={{...styles.td, fontWeight: 600}}>{r.feature_key}</td>
-                    <td style={styles.td}><span style={styles.badge}>{pct(r.feature_ratio)}</span></td>
-                    <td style={styles.td}>{fmt.format(r.feature_dau || 0)}</td>
+            {features.length === 0 ? (
+              <div style={styles.emptyBox}>수집이 현재 불가능한 지표입니다.</div>
+            ) : (
+              <table style={styles.table}>
+                <thead>
+                  <tr>
+                    <th style={styles.th}>날짜</th>
+                    <th style={styles.th}>기능</th>
+                    <th style={styles.th}>고착도</th>
+                    <th style={styles.th}>DAU</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {features.map((r, i) => (
+                    <tr key={i} style={styles.tr}>
+                      <td style={styles.td}>{dateFmt(r.usage_date)}</td>
+                      <td style={{...styles.td, fontWeight: 600}}>{r.feature_key}</td>
+                      <td style={styles.td}><span style={styles.badge}>{pct(r.feature_ratio)}</span></td>
+                      <td style={styles.td}>{fmt.format(r.feature_dau || 0)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
 
           <div style={styles.simpleTableCard}>
@@ -1013,5 +1020,11 @@ const styles = {
     borderRadius: 20,
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
     overflow: 'hidden',
+  },
+  emptyBox: {
+    padding: 20,
+    textAlign: 'center',
+    color: '#9ca3af',
+    fontSize: 13,
   },
 };
