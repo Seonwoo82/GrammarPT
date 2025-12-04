@@ -254,13 +254,13 @@ export default function ResultPage() {
                   <div className="result-data-item-container border-right">
                     <div className="result-data-container-left">
                       <p className="result-data-item-title">틀린 문제</p>
-                      <p className="black-text">{incorrectCount}</p>
+                      <p className="black-text">{incorrectCount} / {questions.length}</p>
                     </div>
                   </div>
                   <div className="result-data-item-container">
                     <div className="result-data-container-right">
                       <p className="result-data-item-title">모르는 문제</p>
-                      <p className="black-text">{unknownCount}</p>
+                      <p className="black-text">{unknownCount} / {questions.length}</p>
                     </div>
                   </div>
                 </div>
@@ -281,21 +281,21 @@ export default function ResultPage() {
               <div className="result-icon-container">
                 <img src={resultIcon} alt="Result Icon" className="result-icon" />
               </div>
-              <div className="result-data-container">
-                <div className="result-data-item-container border-right">
-                  <div className="result-data-container-left">
-                    <p className="result-data-item-title">틀린 문제</p>
-                    <p className="black-text">{incorrectCount}</p>
+                <div className="result-data-container">
+                  <div className="result-data-item-container border-right">
+                    <div className="result-data-container-left">
+                      <p className="result-data-item-title">틀린 문제</p>
+                      <p className="black-text">{incorrectCount} / {questions.length}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="result-data-item-container">
-                  <div className="result-data-container-right">
-                    <p className="result-data-item-title">모르는 문제</p>
-                    <p className="black-text">{unknownCount}</p>
+                  <div className="result-data-item-container">
+                    <div className="result-data-container-right">
+                      <p className="result-data-item-title">모르는 문제</p>
+                      <p className="black-text">{unknownCount} / {questions.length}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
             <div className="result-page-top-content-right">
               <img src={faceIcon} alt="Face Icon" className="face-icon" />
             </div>
