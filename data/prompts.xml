@@ -448,4 +448,146 @@ Lexile: 950–1200+L
             ]]>
         </Content>
     </prompt>
+    <prompt>
+        <Chapter>1</Chapter>
+        <Type>능수능란: 수동태</Type>
+        <Difficulty>낮음</Difficulty>
+        <Content>
+            <![CDATA[
+            ============================================
+🟧 SECTION B — 난이도(Level) 규칙 (Beginner / 입력값 "낮음")
+============================================
+Lexile: 300–600L
+문장 길이: 8~14 단어
+구조: 단일절(simple sentence), 관계사/분사구문/복문 금지
+어휘: A1~A2 (중1~2)
+핵심 규칙 위주, 명확한 시제·형태 유지
+
+            ============================================
+🟦 SECTION C — 수동태(Passive Voice) 문법 정의
+============================================
+아래 5개 규칙은 수동태 문제 자동 생성의 기준이며, 정답/오답 검증의 근거가 된다.
+
+✅ RULE 1 — 능동태 ↔ 수동태 변환 기본
+- 능동: S + V + O → 수동: O + be + p.p. (+ by S)
+- 원문 시제·진행·완료 유지: will design → will be designed / has completed → has been completed / is writing → is being written
+- 대표 오류: be/been/being 누락, 시제 불일치
+
+✅ RULE 2 — 3형식 동사의 수동태
+- S + V + O → O + be + p.p. (+ by S)
+- be는 시제·수 일치 필수: The dishes are prepared. / The homework is checked.
+- 오류: 주어-동사 불일치, 진행형을 단순과거수동으로 오변환(was reading → ✗ was read / ✓ was being read)
+
+✅ RULE 3 — 4형식 동사의 수동태 (전치사 필수)
+- DO 중심: DO + be + p.p. + to/for + IO (A prize was given to him.)
+- IO 중심: IO + be + p.p. + DO (He was given a prize.)
+- 전치사 규칙: give/send/award/grant → to, provide/present → with (present는 with/to), offer → to
+- 오류: be+p.p. 누락, 전치사(to/for/with) 오류
+
+✅ RULE 4 — 5형식 동사의 수동태 (OC 유지)
+- S + V + O + OC → O + be + p.p. + OC 유지
+- 예: The lecture was found interesting. / She was elected the chairperson.
+- 전치사 수동: dedicated to, named after, presented with, left with
+- 오류: OC 형태 오류(interesting→✗ interested), 전치사 누락/오류
+
+✅ RULE 5 — 수동태 오답 템플릿
+- be/been/being 누락·시제 오류, 주어-동사 수 일치 오류
+- 전치사(to/for/with/by) 오용·누락
+- 분사 OC 선택 오류(interesting↔interested)
+- 목적어 위치 오류(4·5형식)
+- 모든 보기 5개 중 오답은 1개만 포함
+
+            ============================================
+🟩 SECTION D — 문제 유형(Type) 1~10 정의
+============================================
+TYPE 1 — 능동태 ↔ 수동태 변환 (시제·진행·완료 유지)
+- 정답: RULE 1에 정확히 맞는 문장
+- 오답: RULE 1 오류(시제 불일치, be/been/being 누락 등)
+
+TYPE 2 — 능동태 ↔ 수동태 변환 (동일 규칙)
+
+TYPE 3 — 수동태 → 능동태 변환
+- 정답: 수동 O + be + p.p. (+by S) → 능동 S + V + O, by 주어 이동, 시제·진행·완료 유지
+- 오답: 주어·목적어 위치 오류, 시제 불일치, 동사 원형 오류 등
+
+TYPE 4 — 수동태 → 능동태 변환 (동일 규칙)
+
+TYPE 5 — 3형식 동사의 수동태
+- 정답: RULE 2 충족
+- 오답: RULE 2 오류(시제/진행형 유지 실패, be 누락 등)
+
+TYPE 6 — 3형식 동사의 수동태 (Type 5와 동일)
+
+TYPE 7 — 4형식 동사의 수동태 (전치사 필수)
+- 정답: RULE 3 충족 (to/for/with 전치사 정확, be+p.p. 유지)
+- 오답: RULE 3 오류(전치사/ be 누락·오류)
+
+TYPE 8 — 4형식 동사의 수동태 (Type 7과 동일)
+
+TYPE 9 — 5형식 동사의 수동태 (OC·전치사 유지)
+- 정답: RULE 4 충족(OC 유지, 전치사 정확)
+- 오답: OC 형태 오류, 전치사 오류/누락, OC 누락
+
+TYPE 10 — 5형식 동사의 수동태 (Type 9와 동일)
+            ]]>
+        </Content>
+    </prompt>
+    <prompt>
+        <Chapter>1</Chapter>
+        <Type>능수능란: 수동태</Type>
+        <Difficulty>보통</Difficulty>
+        <Content>
+            <![CDATA[
+            ============================================
+🟧 SECTION B — 난이도(Level) 규칙 (Intermediate / 입력값 "보통")
+============================================
+Lexile: 700–900L
+문장 길이: 12~20 단어
+구조: 단일절 + 간단한 부사절 가능
+어휘: B1 (중3~고1)
+중급 문장, 동일 문법/유형 규칙 적용
+
+(문법 정의·RULE·TYPE은 낮음과 동일, 난이도만 상향)
+
+            ============================================
+🟦 SECTION C — 수동태(Passive Voice) 문법 정의
+============================================
+(낮음과 동일한 RULE 1~5 적용: 시제·진행·완료 유지, 3/4/5형식 수동, 전치사 규칙, 오답 템플릿)
+
+            ============================================
+🟩 SECTION D — 문제 유형(Type) 1~10 정의
+============================================
+(낮음과 동일한 TYPE 1~10 규칙/지시문 적용)
+            ]]>
+        </Content>
+    </prompt>
+    <prompt>
+        <Chapter>1</Chapter>
+        <Type>능수능란: 수동태</Type>
+        <Difficulty>높음</Difficulty>
+        <Content>
+            <![CDATA[
+            (마스터 난이도에서도 동일한 문법 정의/TYPE 규칙을 사용하며, 고급 문장 난도만 상향 적용합니다.)
+
+            ============================================
+🟧 SECTION B — 난이도(Level) 규칙 (Master / 입력값 "높음")
+============================================
+Lexile: 950–1200+L
+문장 길이: 18~30 단어
+구조: 복문(2~3절), 관계사절·분사구문 자유
+어휘: B2~C1 academic (고2~수능)
+시제·진행·완료/전치사·OC 유지 규칙 준수
+
+            ============================================
+🟦 SECTION C — 수동태(Passive Voice) 문법 정의
+============================================
+(낮음과 동일한 RULE 1~5 적용: 능동↔수동 변환, 3/4/5형식 수동, 전치사 규칙, 오답 템플릿)
+
+            ============================================
+🟩 SECTION D — 문제 유형(Type) 1~10 정의
+============================================
+(낮음과 동일한 TYPE 1~10 규칙/지시문 적용)
+            ]]>
+        </Content>
+    </prompt>
 </prompts>
