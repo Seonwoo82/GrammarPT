@@ -70,7 +70,7 @@ export default function StartPage() {
         <h2 id="start_highlight">똑똑한 영어문제 출제 AI</h2>
         <h1 id="start_title">매일 새로운 영어문제</h1>
         <p id="start_text">
-          하루 5개씩,
+          하루 5분 10문제,
           <br />
           꾸준한 문제풀이 습관을 도와드릴게요!
         </p>
