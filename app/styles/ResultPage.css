@@ -59,10 +59,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 }
 
-.result-icon {
-    width: 133px;
+.result-gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 220px;
+    position: relative;
+}
+
+.result-gauge-arc {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.result-gauge-label {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #E66041;
+    line-height: 1.1;
 }
 
 .result-data-container {

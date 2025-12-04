@@ -19,19 +19,125 @@ const assets = {
     "/assets/emoji_score05.png",
     "/assets/emoji_score06.png",
   ],
-  resultIcons: [
-    "/assets/score_01.png",
-    "/assets/score_02.png",
-    "/assets/score_03.png",
-    "/assets/score_04.png",
-    "/assets/score_05.png",
-    "/assets/score_06.png",
-  ],
   rightAnswerIcon: "/assets/right_answer.png",
   wrongAnswerIcon: "/assets/wrong_answer.png",
   rightAnswerMark: "/assets/right_check.png",
   wrongAnswerMark: "/assets/wrong_check.png",
   saveIcon: "/assets/save.png",
+};
+
+const ScoreGauge = ({ value = 0, total = 10 }) => {
+  const clampedTotal = total || 10;
+  const pct = Math.max(0, Math.min(value / clampedTotal, 1));
+  const radius = 70;
+  const stroke = 12;
+  const cx = 100;
+  const cy = 100;
+  const startX = cx - radius;
+  const startY = cy;
+  const endX = cx + radius;
+  const endY = cy;
+  const arcLength = Math.PI * radius;
+  const dashArray = arcLength;
+  const dashOffset = arcLength * (1 - pct);
+  const label = value === clampedTotal ? "만점" : `${value}/${clampedTotal}`;
+
+  return (
+    <div className="score-gauge">
+      <svg width="200" height="120" viewBox="0 0 200 120">
+        <defs>
+          <linearGradient id="gaugeTrack" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#f0f1f3" />
+            <stop offset="100%" stopColor="#e6e8ec" />
+          </linearGradient>
+        </defs>
+        <path
+          d={`M ${startX} ${startY} A ${radius} ${radius} 0 0 1 ${endX} ${endY}`}
+          fill="none"
+          stroke="url(#gaugeTrack)"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+        />
+        <path
+          d={`M ${startX} ${startY} A ${radius} ${radius} 0 0 1 ${endX} ${endY}`}
+          fill="none"
+          stroke="#E66041"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={dashArray}
+          strokeDashoffset={dashOffset}
+        />
+        <text
+          x={cx}
+          y={cy + 10}
+          textAnchor="middle"
+          fontSize="20"
+          fontWeight="700"
+          fill="#E66041"
+        >
+          {label}
+        </text>
+      </svg>
+    </div>
+  );
+};
+
+const ResultBadge = ({ correct = 0, total = 0 }) => {
+  const safeTotal = total || 1;
+  const ratio = Math.max(0, Math.min(correct / safeTotal, 1));
+  const radius = 80;
+  const strokeWidth = 14;
+  const viewBoxWidth = 220;
+  const viewBoxHeight = 130;
+  const cx = viewBoxWidth / 2;
+  const cy = 110;
+  const startX = cx - radius;
+  const startY = cy;
+  const endX = cx + radius;
+  const endY = cy;
+  const arcLength = Math.PI * radius;
+  const dashOffset = arcLength * (1 - ratio);
+
+  return (
+    <div className="result-gauge">
+      <svg
+        className="result-gauge-arc"
+        viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+        role="img"
+        aria-label={`정답 ${correct} / ${safeTotal}`}
+      >
+        <defs>
+          <linearGradient id="resultGaugeTrack" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#F2F2F2" />
+            <stop offset="100%" stopColor="#EDEDED" />
+          </linearGradient>
+          <linearGradient id="resultGaugeFill" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#E77955" />
+            <stop offset="100%" stopColor="#E3573F" />
+          </linearGradient>
+        </defs>
+        <path
+          d={`M ${startX} ${startY} A ${radius} ${radius} 0 0 1 ${endX} ${endY}`}
+          fill="none"
+          stroke="url(#resultGaugeTrack)"
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+        />
+        <path
+          d={`M ${startX} ${startY} A ${radius} ${radius} 0 0 1 ${endX} ${endY}`}
+          fill="none"
+          stroke="url(#resultGaugeFill)"
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={arcLength}
+          strokeDashoffset={dashOffset}
+        />
+      </svg>
+      <div className="result-gauge-label">
+        {correct}/{safeTotal}
+      </div>
+    </div>
+  );
 };
 
 export default function ResultPage() {
@@ -48,8 +154,6 @@ export default function ResultPage() {
   } = useTestSession();
   const [completeSent, setCompleteSent] = useState(false);
   const [testInfoString, setTestInfoString] = useState("");
-  const [faceIcon, setFaceIcon] = useState(assets.faceIcons[0]);
-  const [resultIcon, setResultIcon] = useState(assets.resultIcons[0]);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [unknownCount, setUnknownCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -181,14 +285,19 @@ export default function ResultPage() {
       setCompleteSent(true);
     }
 
-    const iconIndex = Math.min(correct, assets.faceIcons.length - 1);
-    setFaceIcon(assets.faceIcons[iconIndex]);
-    setResultIcon(assets.resultIcons[iconIndex]);
   }, [questions, results, selectedAnswers, testInfo, router, sessionId, sessionStartedAt, completeSent]);
 
   if (!questions || !results || !selectedAnswers || !testInfo) {
     return null;
   }
+
+  const totalQuestions = questions.length || 0;
+  const normalizedScore = Math.max(0, Math.min(totalQuestions ? correctCount / totalQuestions : 0, 1));
+  const faceIconIndex = Math.min(
+    assets.faceIcons.length - 1,
+    Math.floor(normalizedScore * assets.faceIcons.length)
+  );
+  const faceIcon = assets.faceIcons[faceIconIndex];
 
   const handleConfirmRetry = () => {
     console.log("[result] retry clicked", {
@@ -247,9 +356,7 @@ export default function ResultPage() {
             <div className="result-page-top-content">
               <div className="result-page-top-content-left invisible">
                 <img src={assets.logo} alt="Logo" className="img-logo" />
-                <div className="result-icon-container">
-                  <img src={resultIcon} alt="Result Icon" className="result-icon" />
-                </div>
+                <ScoreGauge value={correctCount} total={questions.length || 10} />
                 <div className="result-data-container">
                   <div className="result-data-item-container border-right">
                     <div className="result-data-container-left">
@@ -266,7 +373,7 @@ export default function ResultPage() {
                 </div>
               </div>
               <div className="result-page-top-content-right">
-                <img src={faceIcon} alt="Face Icon" className="face-icon" />
+                <ScoreGauge value={correctCount} total={questions.length || 10} />
               </div>
             </div>
             <div className="hidden-capture-black-area">
@@ -279,23 +386,23 @@ export default function ResultPage() {
           <div className="result-page-top-content">
             <div className="result-page-top-content-left">
               <div className="result-icon-container">
-                <img src={resultIcon} alt="Result Icon" className="result-icon" />
+                <ResultBadge correct={correctCount} total={questions.length || 1} />
               </div>
-                <div className="result-data-container">
-                  <div className="result-data-item-container border-right">
-                    <div className="result-data-container-left">
-                      <p className="result-data-item-title">틀린 문제</p>
-                      <p className="black-text">{incorrectCount} / {questions.length}</p>
-                    </div>
+              <div className="result-data-container">
+                <div className="result-data-item-container border-right">
+                  <div className="result-data-container-left">
+                    <p className="result-data-item-title">틀린 문제</p>
+                    <p className="black-text">{incorrectCount} / {questions.length}</p>
                   </div>
-                  <div className="result-data-item-container">
-                    <div className="result-data-container-right">
-                      <p className="result-data-item-title">모르는 문제</p>
-                      <p className="black-text">{unknownCount} / {questions.length}</p>
-                    </div>
+                </div>
+                <div className="result-data-item-container">
+                  <div className="result-data-container-right">
+                    <p className="result-data-item-title">모르는 문제</p>
+                    <p className="black-text">{unknownCount} / {questions.length}</p>
                   </div>
                 </div>
               </div>
+            </div>
             <div className="result-page-top-content-right">
               <img src={faceIcon} alt="Face Icon" className="face-icon" />
             </div>
