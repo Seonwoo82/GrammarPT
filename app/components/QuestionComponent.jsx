@@ -1,11 +1,14 @@
 "use client";
 
 export default function QuestionComponent({ question, selectedAnswer, onAnswerSelect }) {
+  const stripLeadingNumbering = (text = "") =>
+    text.replace(/^\s*(?:[①-⑳㉑-㉟]|[1-9]|10)[.)]?\s+/, "");
+
   const sanitizeText = (text = "") =>
     text.replace(/<br\s*\/?>/gi, " ").replace(/\*\*/g, "");
 
   const renderOptionText = (text = "") => {
-    const clean = sanitizeText(text);
+    const clean = stripLeadingNumbering(sanitizeText(text));
     if (clean.includes("<u>")) {
       return (
         <span
