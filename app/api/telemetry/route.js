@@ -15,24 +15,54 @@ const ALLOWED_EVENT_TYPES = new Set([
   "cohort_snapshot",
 ]);
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const makeServerUuid = () => {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch (error) {
+    console.warn("[telemetry] server uuid 생성 실패, fallback 사용", error);
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
+const normalizeUuid = (value) => {
+  const trimmed = value?.toString().trim();
+  if (!trimmed || !UUID_REGEX.test(trimmed)) return null;
+  return trimmed;
+};
+
 const normalizePayload = (body) => {
   const eventType = String(body?.eventType || "").trim();
-  const userId = body?.userId?.toString().trim();
-  const sessionId = body?.sessionId?.toString().trim() || null;
+  const rawUserId = body?.userId;
+  const rawSessionId = body?.sessionId;
   const occurredAt = body?.occurredAt ? new Date(body.occurredAt).toISOString() : new Date().toISOString();
-  const metadata = body?.metadata && typeof body.metadata === "object" ? body.metadata : {};
+  const metadata = body?.metadata && typeof body.metadata === "object" ? { ...body.metadata } : {};
 
   if (!eventType || !ALLOWED_EVENT_TYPES.has(eventType)) {
     throw new Error(`eventType이 필요하거나 허용되지 않았습니다. (허용 값: ${[...ALLOWED_EVENT_TYPES].join(", ")})`);
   }
 
-  if (!userId) {
-    throw new Error("userId가 필요합니다.");
+  const normalizedSessionId = normalizeUuid(rawSessionId);
+  const normalizedUserId = normalizeUuid(rawUserId) || normalizedSessionId || makeServerUuid();
+  const sessionId = normalizedSessionId || normalizedUserId;
+
+  if (!normalizedSessionId && rawSessionId) {
+    metadata._client_session_id = rawSessionId;
+  }
+  if (!normalizeUuid(rawUserId) && rawUserId) {
+    metadata._client_user_id = rawUserId;
   }
 
   return {
     event_type: eventType,
-    user_id: userId,
+    user_id: normalizedUserId,
     session_id: sessionId,
     occurred_at: occurredAt,
     metadata,
