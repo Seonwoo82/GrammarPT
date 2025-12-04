@@ -124,7 +124,7 @@ export async function GET(request) {
         .order("snapshot_date", { ascending: false })
         .limit(1)
     );
-    const stickinessTrend = await fetchData(
+    const stickinessTrendRaw = await fetchData(
       "stickinessTrend",
       applyDateFilter(
         supabase.from("daily_kpi_snapshots").select("*"),
