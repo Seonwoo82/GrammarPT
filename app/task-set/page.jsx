@@ -84,19 +84,25 @@ export default function TaskSetPage() {
         sessionId,
         sessionStartedAt,
       });
-      await sendTelemetry({
-        eventType: "session_start",
-        sessionId,
-        occurredAt: new Date(sessionStartedAt).toISOString(),
-        metadata: {
-          chapter: selectedChapter.id,
-          type: selectedType,
-          difficulty: diff,
-          entry_point: "self",
-          question_count: Array.isArray(data) ? data.length : 0,
-          session_started_at: new Date(sessionStartedAt).toISOString(),
+      const telemetryResult = await sendTelemetry(
+        {
+          eventType: "session_start",
+          sessionId,
+          occurredAt: new Date(sessionStartedAt).toISOString(),
+          metadata: {
+            chapter: selectedChapter.id,
+            type: selectedType,
+            difficulty: diff,
+            entry_point: "self",
+            question_count: Array.isArray(data) ? data.length : 0,
+            session_started_at: new Date(sessionStartedAt).toISOString(),
+          },
         },
-      });
+        { debug: true }
+      );
+      if (!telemetryResult?.ok) {
+        console.warn("[telemetry] session_start 실패", telemetryResult);
+      }
       router.push("/ontest");
     } catch (error) {
       console.error("오류 발생:", error);

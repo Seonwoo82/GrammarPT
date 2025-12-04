@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "./components/Header.jsx";
 import { useTestSession } from "./context/TestSessionContext.jsx";
+import { sendTelemetry } from "@/lib/telemetryClient.js";
 
 const logo3d = "/assets/logo_3d.png";
 
@@ -11,6 +12,7 @@ export default function StartPage() {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(true);
   const { resetSession } = useTestSession();
+  const hasTrackedHomeRef = useRef(false);
 
   useEffect(() => {
     resetSession();
@@ -21,6 +23,24 @@ export default function StartPage() {
 
     checkMobile();
   }, [resetSession]);
+
+  useEffect(() => {
+    if (hasTrackedHomeRef.current) return;
+    hasTrackedHomeRef.current = true;
+    const trackHomeView = async () => {
+      const result = await sendTelemetry(
+        {
+          eventType: "feature_used",
+          metadata: { feature: "home_view", entry_point: "home" },
+        },
+        { debug: true }
+      );
+      if (!result?.ok) {
+        console.warn("[telemetry] 홈 화면 추적 실패", result);
+      }
+    };
+    trackHomeView();
+  }, []);
 
   const handleStart = () => {
     router.push("/task-set");

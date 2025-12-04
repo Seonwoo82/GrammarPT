@@ -299,7 +299,7 @@ export default function ResultPage() {
   );
   const faceIcon = assets.faceIcons[faceIconIndex];
 
-  const handleConfirmRetry = () => {
+  const handleConfirmRetry = async () => {
     console.log("[result] retry clicked", {
       questionsLength: questions?.length,
       hasResults: Boolean(results),
@@ -321,19 +321,25 @@ export default function ResultPage() {
       sessionId,
       metadata: { feature: "retry" },
     });
-    sendTelemetry({
-      eventType: "session_start",
-      sessionId: newSessionId,
-      occurredAt: new Date(startedAt).toISOString(),
-      metadata: {
-        chapter: testInfo?.chapter,
-        type: testInfo?.type,
-        difficulty: testInfo?.difficulty,
-        entry_point: "retry",
-        question_count: questions?.length || 0,
-        session_started_at: new Date(startedAt).toISOString(),
+    const telemetryResult = await sendTelemetry(
+      {
+        eventType: "session_start",
+        sessionId: newSessionId,
+        occurredAt: new Date(startedAt).toISOString(),
+        metadata: {
+          chapter: testInfo?.chapter,
+          type: testInfo?.type,
+          difficulty: testInfo?.difficulty,
+          entry_point: "retry",
+          question_count: questions?.length || 0,
+          session_started_at: new Date(startedAt).toISOString(),
+        },
       },
-    });
+      { debug: true }
+    );
+    if (!telemetryResult?.ok) {
+      console.warn("[telemetry] session_start (retry) 실패", telemetryResult);
+    }
     setShowReSheet(false);
     // ensure state is updated before navigation
     setTimeout(() => router.push("/ontest"), 0);
