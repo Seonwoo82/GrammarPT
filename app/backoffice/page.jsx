@@ -5,6 +5,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 const fmt = new Intl.NumberFormat("ko-KR");
 const pct = (v) => (v == null ? "-" : `${(v * 100).toFixed(1)}%`);
 const dateFmt = (v) => v ? new Date(v).toLocaleDateString("ko-KR", { month: "short", day: "numeric" }) : "-";
+const dateKey = (v) => {
+  if (!v) return null;
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString().slice(0, 10);
+};
 
 const useMetrics = () => {
   const [loading, setLoading] = useState(false);
@@ -40,6 +46,8 @@ export default function BackofficeDashboard() {
   }, []);
   const [dateFrom, setDateFrom] = useState(defaultFrom);
   const [dateTo, setDateTo] = useState(defaultTo);
+  const [hoveredSpark, setHoveredSpark] = useState(null);
+  const [hoveredDauBar, setHoveredDauBar] = useState(null);
   const { data, loading, error, load } = useMetrics();
   const initialParams = useMemo(() => {
     const params = new URLSearchParams();
@@ -98,7 +106,36 @@ export default function BackofficeDashboard() {
 
   const snap = data?.kpiSnapshot;
   const trend = useMemo(() => (data?.stickinessTrend || []).slice().reverse(), [data]);
-  const dauData = useMemo(() => trend.map(t => t.dau || 0), [trend]);
+  const dauSeries = useMemo(() => {
+    const startKey = dateKey(dateFrom) || (trend[0]?.snapshot_date ? dateKey(trend[0].snapshot_date) : null);
+    const endKey = dateKey(dateTo) || (trend[trend.length - 1]?.snapshot_date ? dateKey(trend[trend.length - 1].snapshot_date) : null);
+    if (!startKey || !endKey) return [];
+    const start = new Date(startKey);
+    const end = new Date(endKey);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start > end) return [];
+
+    const map = new Map();
+    trend.forEach(t => {
+      const key = dateKey(t.snapshot_date);
+      if (key) map.set(key, t.dau || 0);
+    });
+
+    const series = [];
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const key = d.toISOString().slice(0, 10);
+      series.push({ date: key, value: map.get(key) || 0 });
+    }
+    return series;
+  }, [trend, dateFrom, dateTo]);
+  const dauSpark = useMemo(() => dauSeries.slice(-7), [dauSeries]);
+  const dauSparkMax = useMemo(() => {
+    if (dauSpark.length === 0) return 1;
+    return Math.max(...dauSpark.map(d => d.value)) || 1;
+  }, [dauSpark]);
+  const dauMax = useMemo(() => {
+    if (dauSeries.length === 0) return 1;
+    return Math.max(...dauSeries.map(d => d.value)) || 1;
+  }, [dauSeries]);
   const voluntary = useMemo(() => (data?.voluntaryReuse || []).slice(0, 5), [data]);
   const volData = useMemo(() => voluntary.slice().reverse().map(v => v.voluntary_sessions || 0), [voluntary]);
   const share = useMemo(() => (data?.shareRates || []).slice().reverse(), [data]);
@@ -188,9 +225,25 @@ export default function BackofficeDashboard() {
             <div style={styles.kpiValue}>{fmt.format(snap?.dau || 0)}</div>
             <div style={styles.kpiSub}>일간 활성 사용자</div>
             <div style={styles.sparkContainer}>
-              {dauData.slice(-7).map((v, i) => {
-                const max = Math.max(...dauData.slice(-7)) || 1;
-                return <div key={i} style={{...styles.sparkBar, height: `${Math.max((v/max)*100, 10)}%`, backgroundColor: '#E66041'}} />;
+              {dauSpark.map((point, i) => {
+                const heightPct = point.value === 0 ? 0 : Math.max((point.value / (dauSparkMax || 1)) * 100, 10);
+                const isHovered = hoveredSpark === i;
+                return (
+                  <div
+                    key={point.date || i}
+                    style={styles.sparkBarWrapper}
+                    onMouseEnter={() => setHoveredSpark(i)}
+                    onMouseLeave={() => setHoveredSpark(null)}
+                  >
+                    <div style={{...styles.sparkBar, height: `${heightPct}%`, backgroundColor: '#E66041'}} />
+                    {isHovered && (
+                      <div style={styles.tooltip}>
+                        <div style={styles.tooltipValue}>{fmt.format(point.value)}</div>
+                        <div style={styles.tooltipDate}>{dateFmt(point.date)}</div>
+                      </div>
+                    )}
+                  </div>
+                );
               })}
             </div>
           </div>
@@ -237,12 +290,26 @@ export default function BackofficeDashboard() {
             <div style={styles.chartTitle}>DAU 추이</div>
             <div style={styles.chartSub}>최근 일간 활성 사용자 변화</div>
             <div style={styles.barChartContainer}>
-              {dauData.map((v, i) => {
-                const max = Math.max(...dauData) || 1;
+              {dauSeries.map((point, i) => {
+                const heightPct = point.value === 0 ? 0 : Math.max((point.value / (dauMax || 1)) * 100, 5);
+                const isHovered = hoveredDauBar === i;
                 return (
-                  <div key={i} style={styles.barWrapper}>
-                    <div style={styles.barValue}>{v > 999 ? `${(v/1000).toFixed(0)}K` : v}</div>
-                    <div style={{...styles.bar, height: `${Math.max((v/max)*100, 5)}%`, backgroundColor: '#E66041'}} />
+                  <div
+                    key={point.date || i}
+                    style={styles.barWrapper}
+                    onMouseEnter={() => setHoveredDauBar(i)}
+                    onMouseLeave={() => setHoveredDauBar(null)}
+                  >
+                    <div style={{...styles.barValue, opacity: isHovered ? 1 : 0, transition: 'opacity 0.2s'}}>
+                      {fmt.format(point.value)}
+                    </div>
+                    <div style={{...styles.bar, height: `${heightPct}%`, backgroundColor: '#E66041'}} />
+                    {isHovered && (
+                      <div style={styles.tooltip}>
+                        <div style={styles.tooltipValue}>{fmt.format(point.value)}</div>
+                        <div style={styles.tooltipDate}>{dateFmt(point.date)}</div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -795,6 +862,14 @@ const styles = {
     gap: 3,
     height: 40,
     marginTop: 16,
+    overflow: 'visible',
+  },
+  sparkBarWrapper: {
+    flex: 1,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'flex-end',
+    position: 'relative',
   },
   sparkBar: {
     flex: 1,
@@ -836,6 +911,7 @@ const styles = {
     alignItems: 'center',
     height: '100%',
     justifyContent: 'flex-end',
+    position: 'relative',
   },
   barValue: {
     fontSize: 10,
@@ -847,6 +923,31 @@ const styles = {
     backgroundColor: '#E66041',
     borderRadius: '6px 6px 0 0',
     transition: 'height 0.3s',
+  },
+  tooltip: {
+    position: 'absolute',
+    bottom: '100%',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: '#111827',
+    color: '#fff',
+    padding: '6px 8px',
+    borderRadius: 8,
+    fontSize: 10,
+    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+    whiteSpace: 'nowrap',
+    marginBottom: 6,
+    pointerEvents: 'none',
+    zIndex: 10,
+  },
+  tooltipValue: {
+    fontWeight: 700,
+    letterSpacing: '-0.01em',
+  },
+  tooltipDate: {
+    fontSize: 9,
+    color: '#e5e7eb',
+    marginTop: 2,
   },
   lineChartContainer: {
     marginTop: 20,

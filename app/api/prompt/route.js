@@ -9,6 +9,7 @@ export const runtime = "nodejs";
 
 let promptCache = null;
 let commonPromptCache = null;
+let difficultyPromptCache = null;
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -31,8 +32,7 @@ const loadPrompts = () => {
   promptList.forEach((item) => {
     const chapter = Number.parseInt(String(item.Chapter).trim(), 10);
     const type = String(item.Type).trim();
-    const difficulty = String(item.Difficulty).trim();
-    const key = `${chapter}|${type}|${difficulty}`;
+    const key = `${chapter}|${type}`;
     promptCache.set(key, item.Content?.trim() || "");
   });
 
@@ -50,17 +50,49 @@ const loadCommonPrompt = () => {
   return commonPromptCache;
 };
 
+const loadDifficultyPrompts = () => {
+  if (difficultyPromptCache) {
+    return difficultyPromptCache;
+  }
+
+  const yamlContent = fs.readFileSync(getDataPath("difficulty.yaml"), "utf-8");
+  const data = yaml.load(yamlContent);
+  const levels = data?.levels || {};
+
+  difficultyPromptCache = new Map();
+  Object.entries(levels).forEach(([level, template]) => {
+    difficultyPromptCache.set(String(level).trim(), (template || "").trim());
+  });
+
+  return difficultyPromptCache;
+};
+
 const generatePrompt = (number, chapterType, difficulty) => {
   const prompts = loadPrompts();
   const commonPrompt = loadCommonPrompt();
-  const key = `${number}|${chapterType}|${difficulty}`;
-  const promptContent = prompts.get(key);
+  const difficultyPrompts = loadDifficultyPrompts();
 
-  if (!promptContent) {
-    return `${commonPrompt} 해당하는 프롬프트를 찾을 수 없습니다.`;
+  const chapterKey = `${Number.parseInt(String(number).trim(), 10)}|${String(chapterType).trim()}`;
+  const difficultyKey = String(difficulty).trim();
+
+  const chapterPrompt = prompts.get(chapterKey);
+  const difficultyPrompt = difficultyPrompts.get(difficultyKey);
+
+  const promptParts = [commonPrompt];
+
+  if (difficultyPrompt) {
+    promptParts.push(difficultyPrompt);
+  } else {
+    promptParts.push(`선택한 난이도(${difficulty}) 프롬프트를 찾을 수 없습니다.`);
   }
 
-  return `${commonPrompt}\n${promptContent}`;
+  if (chapterPrompt) {
+    promptParts.push(chapterPrompt);
+  } else {
+    promptParts.push(`선택한 챕터/타입(${chapterKey}) 프롬프트를 찾을 수 없습니다.`);
+  }
+
+  return promptParts.join("\n");
 };
 
 const extractQuestionsFromModel = (text) => {
