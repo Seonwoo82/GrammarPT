@@ -19,6 +19,11 @@ const diffIntro = {
 export default function DiffSelect({ onNext, difficulty = [], selectedType }) {
   const [selectedDifficulty, setSelectedDifficulty] = useState("보통");
 
+  const handleDifficultySelect = (diff) => {
+    setSelectedDifficulty(diff);
+    onNext(diff);
+  };
+
   const getVideoUrl = (diff) => {
     if (selectedType && typeof selectedType === "object" && selectedType.videos) {
       return selectedType.videos[diff];
@@ -36,12 +41,6 @@ export default function DiffSelect({ onNext, difficulty = [], selectedType }) {
     return "";
   };
 
-  const handleNext = () => {
-    if (selectedDifficulty) {
-      onNext(selectedDifficulty);
-    }
-  };
-
   return (
     <div className="diff-select">
       <div className="diff-select-title">
@@ -52,7 +51,7 @@ export default function DiffSelect({ onNext, difficulty = [], selectedType }) {
           <div
             key={diff}
             className={`diff-card ${selectedDifficulty === diff ? "onSelected" : ""} diff${diff}`}
-            onClick={() => setSelectedDifficulty(diff)}
+            onClick={() => handleDifficultySelect(diff)}
             tabIndex={0}
             aria-label={`난이도 ${diff} 선택`}
           >
@@ -67,13 +66,6 @@ export default function DiffSelect({ onNext, difficulty = [], selectedType }) {
       <div style={{ padding: "20px", display: "flex", justifyContent: "center" }}>
         <YoutubeFrame videoId={getVideoUrl(selectedDifficulty)} />
       </div>
-      <button
-        className={`next-button ${!selectedDifficulty ? "disabled" : ""}`}
-        onClick={handleNext}
-        aria-disabled={!selectedDifficulty}
-      >
-        완료
-      </button>
     </div>
   );
 }
