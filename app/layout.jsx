@@ -10,7 +10,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body>
-        <Providers>{children}</Providers>
+        <div className="mobile-shell">
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );
