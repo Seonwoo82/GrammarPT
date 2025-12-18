@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { XMLParser } from "fast-xml-parser";
 import yaml from "js-yaml";
 import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const runtime = "nodejs";
 
@@ -117,6 +118,11 @@ const logDuration = (label, start) => {
   console.log(`[prompt-timer] ${label}: ${elapsed}ms`);
 };
 
+const getAiProvider = () => {
+  const provider = process.env.USE_AI || "GPT";
+  return String(provider).trim().toUpperCase();
+};
+
 async function getGptResponse(prompt) {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY가 설정되지 않았습니다.");
@@ -170,6 +176,29 @@ async function getGptResponse(prompt) {
   return extractQuestionsFromModel(content);
 }
 
+async function getGeminiResponse(prompt) {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY가 설정되지 않았습니다.");
+  }
+
+  const apiStart = Date.now();
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY, {
+    apiVersion: process.env.GEMINI_API_VERSION?.trim() || "v1beta",
+  });
+  const modelName = "gemini-2.5-flash";
+  const model = genAI.getGenerativeModel({ model: modelName });
+  const localizedPrompt = `${prompt}\n\n모든 응답은 한국어로 작성하세요. JSON 형식은 유지하세요.`;
+  const result = await model.generateContent(localizedPrompt);
+  logDuration(`Gemini generateContent (${modelName})`, apiStart);
+
+  const content = result?.response?.text()?.trim();
+  if (!content) {
+    throw new Error("응답이 비어 있습니다.");
+  }
+
+  return extractQuestionsFromModel(content);
+}
+
 export async function POST(request) {
   try {
     const requestStart = Date.now();
@@ -190,7 +219,10 @@ export async function POST(request) {
     const promptStart = Date.now();
     const prompt = generatePrompt(number, chapter, difficulty);
     logDuration("prompt generation", promptStart);
-    const questions = await getGptResponse(prompt);
+    const aiProvider = getAiProvider();
+    console.log(`[prompt] provider selected: ${aiProvider}`);
+    const questions =
+      aiProvider === "GEMINI" ? await getGeminiResponse(prompt) : await getGptResponse(prompt);
     logDuration("request total", requestStart);
 
     return NextResponse.json(questions || []);

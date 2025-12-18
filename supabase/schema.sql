@@ -135,7 +135,8 @@ create table if not exists public.daily_kpi_snapshots (
 );
 
 -- Views for Admin dashboard
-create or replace view public.admin_session_persistence_view as
+create or replace view public.admin_session_persistence_view
+with (security_invoker = true) as
 with weekly_sessions as (
   select
     user_id,
@@ -160,7 +161,8 @@ select
 from weekly_summary
 order by week_start desc;
 
-create or replace view public.admin_voluntary_reuse_view as
+create or replace view public.admin_voluntary_reuse_view
+with (security_invoker = true) as
 select
   date_trunc('week', started_at)::date as week_start,
   count(*) filter (where entry_point = 'self') as voluntary_sessions,
@@ -170,7 +172,8 @@ from public.student_sessions
 group by 1
 order by week_start desc;
 
-create or replace view public.admin_effort_uplift_view as
+create or replace view public.admin_effort_uplift_view
+with (security_invoker = true) as
 with weekly_users as (
   select
     date_trunc('week', started_at)::date as week_start,
@@ -188,7 +191,8 @@ from weekly_users
 group by 1
 order by week_start desc;
 
-create or replace view public.admin_feature_stickiness_view as
+create or replace view public.admin_feature_stickiness_view
+with (security_invoker = true) as
 with dau as (
   select
     dau_bucket as usage_date,
@@ -207,7 +211,8 @@ join dau on dau.usage_date = fud.usage_date
 group by 1,2,4
 order by usage_date desc, feature_ratio desc;
 
-create or replace view public.admin_share_rate_view as
+create or replace view public.admin_share_rate_view
+with (security_invoker = true) as
 with weekly_active as (
   select
     date_trunc('week', started_at)::date as week_start,
@@ -232,7 +237,8 @@ from weekly_active a
 left join weekly_share s on s.week_start = a.week_start
 order by a.week_start desc;
 
-create or replace view public.admin_self_correction_view as
+create or replace view public.admin_self_correction_view
+with (security_invoker = true) as
 select
   coalesce(skill_id, 'unknown') as skill_id,
   count(*) as attempts,
@@ -241,3 +247,15 @@ select
 from public.session_problem_attempts
 group by 1
 order by attempts desc;
+
+-- Harden RLS on tables exposed via PostgREST
+alter table if exists public.access_codes enable row level security;
+alter table if exists public.access_code_sessions enable row level security;
+alter table if exists public.behavior_events enable row level security;
+alter table if exists public.user_profiles enable row level security;
+alter table if exists public.student_sessions enable row level security;
+alter table if exists public.session_problem_attempts enable row level security;
+alter table if exists public.feature_usage_daily enable row level security;
+alter table if exists public.share_events enable row level security;
+alter table if exists public.retention_cohort_snapshots enable row level security;
+alter table if exists public.daily_kpi_snapshots enable row level security;

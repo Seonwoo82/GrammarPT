@@ -5,19 +5,19 @@ import { CHAPTERS } from "../data/chapters.js";
 import YoutubeFrame from "./YoutubeFrame.jsx";
 
 const diffIcons = {
-  낮음: "/assets/diff_easy.png",
-  보통: "/assets/diff_mid.png",
-  높음: "/assets/diff_hard.png",
+  초급: "/assets/diff_easy.png",
+  중급: "/assets/diff_mid.png",
+  고급: "/assets/diff_hard.png",
 };
 
 const diffIntro = {
-  낮음: "중등 단어",
-  보통: "고등일반 단어",
-  높음: "수능 단어",
+  초급: "중1–중3 / A1~A2",
+  중급: "고1–고2 / B1~B2",
+  고급: "수능 / B2~C1",
 };
 
 export default function DiffSelect({ onNext, difficulty = [], selectedType }) {
-  const [selectedDifficulty, setSelectedDifficulty] = useState("보통");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("중급");
 
   const handleDifficultySelect = (diff) => {
     setSelectedDifficulty(diff);

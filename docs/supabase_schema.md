@@ -228,8 +228,9 @@ group by skill_id;
 ```
 
 ## 6. 보안 & RLS
-- 서비스 로직은 SSO 관리자 전용이므로, `behavior_events`/`student_sessions` 등에서 기본적으로 RLS 비활성화 + 서비스 키만 접근.
-- 만약 클라이언트 직접 접근이 필요하면 `anon` 키로 사용 가능한 뷰만 허용하고 PII는 마스킹.
+- 모든 테이블에 RLS를 활성화하고, 뷰는 `security_invoker=true`로 정의해 호출자 권한을 그대로 사용한다.
+- 현재 API는 서비스 키(`service_role`)로만 접근하므로 추가 정책 없이도 동작하며, `anon`/`authenticated` 역할은 기본적으로 차단된다.
+- 만약 클라이언트 직접 접근이 필요하면 별도 RLS policy를 추가하고, 필요한 필드만 노출하는 전용 뷰를 만들어야 한다.
 
 ## 7. 다음 단계
 1. Supabase SQL editor 또는 CLI로 `supabase/schema.sql` 내용을 실행.

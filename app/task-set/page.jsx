@@ -144,7 +144,7 @@ export default function TaskSetPage() {
           />
         )}
         {currentStep === "diff" && selectedType && (
-          <DiffSelect onNext={handleDiffSelect} difficulty={["높음", "보통", "낮음"]} selectedType={selectedType} />
+          <DiffSelect onNext={handleDiffSelect} difficulty={["고급", "중급", "초급"]} selectedType={selectedType} />
         )}
       </div>
     </>

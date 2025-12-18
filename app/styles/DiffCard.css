@@ -48,17 +48,17 @@
     border-radius: 30px;
 }
 
-.diff-intro.낮음 {
+.diff-intro.초급 {
     background-color: #FFF0D7;
     color: #FF9000;
 }
 
-.diff-intro.보통 {
+.diff-intro.중급 {
     background-color: #FFECDF;
     color: #FF7719;
 }
 
-.diff-intro.높음 {
+.diff-intro.고급 {
     background-color: #FFE5DF;
     color: #E66041;
 }
