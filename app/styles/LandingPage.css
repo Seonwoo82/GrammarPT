@@ -558,6 +558,212 @@
   opacity: 0.6;
 }
 
+/* PC에서도 모바일 쉘 안에서는 모바일 레이아웃/폰트 강제 적용 */
+.mobile-shell .landing-header {
+  padding: 0 16px;
+  flex-direction: row;
+  height: 60px;
+}
+
+.mobile-shell .landing-content {
+  max-width: 480px;
+  padding: 0 16px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.mobile-shell .landing-first-section {
+  flex-direction: column;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.mobile-shell .landing-first-section-left {
+  order: 1;
+}
+
+.mobile-shell .landing-first-section-right {
+  order: 2;
+  margin-top: 30px;
+}
+
+.mobile-shell .landing-first-section-image {
+  width: 100%;
+  max-width: 400px;
+}
+
+.mobile-shell .landing-first-section-title {
+  font-size: 24px;
+}
+
+.mobile-shell .landing-first-section-subtitle {
+  font-size: 16px;
+}
+
+.mobile-shell .landing-second-section-title {
+  font-size: 28px;
+}
+
+.mobile-shell .experience-box {
+  flex-direction: column;
+  padding: 16px;
+  margin: 0 16px;
+}
+
+.mobile-shell .experience-left {
+  border-bottom: none;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.mobile-shell .experience-right {
+  width: 100%;
+  padding-left: 0;
+}
+
+.mobile-shell .experience-title {
+  font-size: 24px;
+}
+
+.mobile-shell .experience-highlight-text {
+  font-size: 16px;
+}
+
+.mobile-shell .experience-detail-text {
+  font-size: 14px;
+}
+
+.mobile-shell .where-content {
+  flex-direction: column;
+  gap: 30px;
+}
+
+.mobile-shell .where-title,
+.mobile-shell .where-subtitle {
+  font-size: 24px;
+}
+
+.mobile-shell .where-image {
+  width: 100%;
+}
+
+.mobile-shell .where-points {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mobile-shell .point-item {
+  font-size: 14px;
+  text-align: center;
+  justify-content: center;
+}
+
+.mobile-shell .mockup-content {
+  flex-direction: column;
+  text-align: center;
+  gap: 30px;
+}
+
+.mobile-shell .mockup-left {
+  align-items: center;
+}
+
+.mobile-shell .mockup-right {
+  width: 100%;
+}
+
+.mobile-shell .mockup-image {
+  width: 100%;
+  max-width: 400px;
+}
+
+.mobile-shell .mockup-description {
+  font-size: 18px;
+}
+
+.mobile-shell .recommend-box {
+  margin: 8px 16px;
+  padding: 12px 20px;
+  border-radius: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mobile-shell .recommend-title {
+  font-size: 28px;
+}
+
+.mobile-shell .recommend-small-text {
+  font-size: 14px;
+}
+
+.mobile-shell .banner-text-container {
+  padding: 0 20px;
+}
+
+.mobile-shell .banner-text-primary {
+  font-size: 20px;
+}
+
+.mobile-shell .banner-text-secondary {
+  font-size: 24px;
+}
+
+.mobile-shell .mid-banner-container {
+  min-height: 140px;
+  position: relative;
+  padding: 20px 0;
+}
+
+.mobile-shell .mid-banner-image {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  object-fit: cover;
+}
+
+.mobile-shell .bottom-service-content {
+  flex-direction: column;
+  text-align: center;
+  gap: 20px;
+  padding: 24px 16px;
+}
+
+.mobile-shell .inquiry-button {
+  width: 100%;
+  max-width: 280px;
+  margin-top: 16px;
+  padding: 12px 0;
+}
+
+.mobile-shell .footer-content {
+  text-align: center;
+  padding: 0 16px;
+}
+
+.mobile-shell .footer-info {
+  word-break: keep-all;
+  line-height: 1.6;
+  font-size: 12px;
+}
+
+.mobile-shell .start-free-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  min-width: auto;
+  height: 32px;
+}
+
+.mobile-shell .arrow-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.mobile-shell .start-free-button span:last-child {
+  display: none;
+}
+
 /* 기본 모바일 스타일 */
 @media screen and (max-width: 768px) {
   .landing-header {
