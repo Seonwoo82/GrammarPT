@@ -80,9 +80,11 @@ html, body, #__next {
 
 .mobile-shell {
   width: 100%;
+  max-width: var(--mobile-max-width);
   min-height: 100vh;
+  margin: 0 auto;
+  background-color: #ffffff;
 }
-
 
 .header {
   flex: 0 0 48px; 
@@ -106,6 +108,37 @@ html, body, #__next {
   
 }
 
+.mobile-shell .app-container,
+.mobile-shell #back_header_container,
+.mobile-shell .container {
+  max-width: var(--mobile-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mobile-shell .next-button {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--mobile-max-width);
+}
+
+.mobile-shell .next-button-container {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+.mobile-shell .landing-header,
+.mobile-shell .result-header,
+.mobile-shell .grammar-toast-container {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--mobile-max-width);
+}
+
 @media (min-width: 768px) {
   body {
     display: flex;
@@ -114,43 +147,7 @@ html, body, #__next {
   }
 
   .mobile-shell {
-    width: 100%;
-    max-width: var(--mobile-max-width);
-    min-height: 100vh;
-    margin: 0 auto;
-    background-color: #ffffff;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
     position: relative;
-  }
-
-  .mobile-shell .app-container,
-  .mobile-shell #back_header_container,
-  .mobile-shell .container {
-    max-width: var(--mobile-max-width);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .mobile-shell .next-button {
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: var(--mobile-max-width);
-  }
-
-  .mobile-shell .next-button-container {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-  }
-
-  .mobile-shell .landing-header,
-  .mobile-shell .result-header,
-  .mobile-shell .grammar-toast-container {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: var(--mobile-max-width);
   }
 }

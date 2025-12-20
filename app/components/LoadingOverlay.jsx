@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "./Header.jsx";
 
@@ -46,7 +46,7 @@ const normalizeVideoRow = (row) => {
   };
 };
 
-const withAutoplayParams = (url, params = "autoplay=1&mute=1&controls=0") => {
+const withAutoplayParams = (url, params = "autoplay=1&controls=0") => {
   if (!url) return url;
   if (url.includes("autoplay=")) return url;
 
@@ -78,9 +78,9 @@ const resolvePlayerSource = (video) => {
   if (platform === "drive" || (video.videoUrl || "").includes("drive.google.com")) {
     const driveId = extractDriveId(video.videoId || video.videoUrl);
     if (!driveId) {
-      return video.videoUrl ? { type: "iframe", src: withAutoplayParams(video.videoUrl, "autoplay=1&mute=1&muted=1") } : null;
+      return video.videoUrl ? { type: "iframe", src: withAutoplayParams(video.videoUrl, "autoplay=1&controls=0") } : null;
     }
-    const params = "autoplay=1&mute=1&muted=1&controls=0&loop=1";
+    const params = "autoplay=1&controls=0&loop=1";
     const src = `https://drive.google.com/file/d/${driveId}/preview?${params}`;
     return { type: "iframe", src };
   }
@@ -89,7 +89,7 @@ const resolvePlayerSource = (video) => {
     const youtubeId = extractYoutubeId(video.videoId || video.videoUrl);
     if (!youtubeId) return null;
 
-    const params = `autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${youtubeId}`;
+    const params = `autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${youtubeId}&enablejsapi=1`;
     return { type: "iframe", src: `https://www.youtube.com/embed/${youtubeId}?${params}` };
   }
 
@@ -113,6 +113,9 @@ const pickRandomVideo = (videos) => {
 export default function LoadingOverlay() {
   const [secondCheckOngoing, setSecondCheckOngoing] = useState(false);
   const [loadingVideo, setLoadingVideo] = useState(DEFAULT_LOADING_VIDEO);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const videoRef = useRef(null);
+  const iframeRef = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -146,6 +149,7 @@ export default function LoadingOverlay() {
         } else {
           setLoadingVideo(DEFAULT_LOADING_VIDEO);
         }
+        setIsPlaying(true);
       } catch (error) {
         console.warn("[loading-overlay] 영상 목록 로드 실패, 기본 영상 사용", error);
         if (isMounted) {
@@ -167,33 +171,70 @@ export default function LoadingOverlay() {
 
   const playerSource = resolvePlayerSource(loadingVideo);
 
+  const handleVideoToggle = () => {
+    setIsPlaying((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const sourceType = playerSource?.type;
+    if (!sourceType) return;
+
+    if (sourceType === "video") {
+      const videoEl = videoRef.current;
+      if (!videoEl) return;
+
+      if (isPlaying) {
+        const playPromise = videoEl.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch((err) => console.warn("[loading-overlay] video play blocked", err));
+        }
+      } else {
+        videoEl.pause();
+      }
+      return;
+    }
+
+    if (sourceType === "iframe") {
+      const iframeEl = iframeRef.current;
+      if (!iframeEl || !iframeEl.contentWindow) return;
+      if (playerSource.src.includes("youtube.com/embed/")) {
+        iframeEl.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func: isPlaying ? "playVideo" : "pauseVideo", args: [] }),
+          "*"
+        );
+      }
+    }
+  }, [isPlaying, playerSource?.type, playerSource?.src]);
+
   return (
     <>
       <Header />
       <div className="loading-overlay">
-        {playerSource && (
-          <div className="loading-hero-video">
-            {playerSource.type === "video" ? (
+        <div className="loading-hero-video" role="button" onClick={handleVideoToggle}>
+          {playerSource &&
+            (playerSource.type === "video" ? (
               <video
+                key={loadingVideo.id}
+                ref={videoRef}
                 className="loading-video-player"
                 src={playerSource.src}
                 autoPlay
                 loop
-                muted
                 playsInline
-                controls
               />
             ) : (
               <iframe
+                key={loadingVideo.id}
+                ref={iframeRef}
                 className="loading-video-iframe"
                 src={playerSource.src}
                 allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                 allowFullScreen
                 title="로딩 중 안내 영상"
               ></iframe>
-            )}
-          </div>
-        )}
+            ))}
+          {playerSource && <div className="loading-video-hint">{isPlaying ? "탭해서 일시정지" : "탭해서 재생"}</div>}
+        </div>
         <p className="loading-text">잠시만 기다려주세요.</p>
         <h1 className="loading-title">AI가 열심히 문제를 출제중이에요!</h1>
         <div className="loading-progress-container">
