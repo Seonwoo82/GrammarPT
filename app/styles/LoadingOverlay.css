@@ -8,19 +8,20 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    overflow-y: auto;
+    padding: 0 16px 48px;
+    box-sizing: border-box;
 }
 
-.loading-anim {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 56px;
+.loading-hero-video {
     width: 100%;
-    height: auto;
-}
-
-.loading-anim-lottie {
-    height: 58px;
+    max-width: 720px;
+    margin-top: 32px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    background: #000;
+    aspect-ratio: 16 / 9;
 }
 
 .loading-text {
@@ -86,4 +87,22 @@
     border: none;
     font-size: 16px;
     font-weight: 600;
+}
+
+.loading-video-iframe,
+.loading-video-player {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+.loading-video-player {
+    object-fit: cover;
+}
+
+@media (max-width: 640px) {
+    .stop-container {
+        margin-top: 56px;
+    }
 }
