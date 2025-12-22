@@ -117,6 +117,7 @@ export default function LoadingOverlay() {
   const videoRef = useRef(null);
   const iframeRef = useRef(null);
   const router = useRouter();
+  const playerSource = resolvePlayerSource(loadingVideo);
   const sendIframePlayCommand = useCallback(() => {
     const iframeEl = iframeRef.current;
     if (!iframeEl || !iframeEl.contentWindow || !playerSource?.src) return;
@@ -178,8 +179,6 @@ export default function LoadingOverlay() {
   const handleStopButton = () => {
     router.push("/");
   };
-
-  const playerSource = resolvePlayerSource(loadingVideo);
 
   const handleVideoToggle = () => {
     setIsPlaying((prev) => !prev);
