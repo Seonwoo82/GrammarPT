@@ -117,6 +117,16 @@ export default function LoadingOverlay() {
   const videoRef = useRef(null);
   const iframeRef = useRef(null);
   const router = useRouter();
+  const sendIframePlayCommand = useCallback(() => {
+    const iframeEl = iframeRef.current;
+    if (!iframeEl || !iframeEl.contentWindow || !playerSource?.src) return;
+    if (playerSource.src.includes("youtube.com/embed/")) {
+      iframeEl.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "playVideo", args: [] }),
+        "*"
+      );
+    }
+  }, [playerSource]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -195,16 +205,32 @@ export default function LoadingOverlay() {
     }
 
     if (sourceType === "iframe") {
-      const iframeEl = iframeRef.current;
-      if (!iframeEl || !iframeEl.contentWindow) return;
+      if (!iframeRef.current || !iframeRef.current.contentWindow) return;
       if (playerSource.src.includes("youtube.com/embed/")) {
-        iframeEl.contentWindow.postMessage(
+        iframeRef.current.contentWindow.postMessage(
           JSON.stringify({ event: "command", func: isPlaying ? "playVideo" : "pauseVideo", args: [] }),
           "*"
         );
       }
     }
   }, [isPlaying, playerSource?.type, playerSource?.src]);
+
+  useEffect(() => {
+    const videoEl = videoRef.current;
+    if (!videoEl) return;
+    const handleCanPlay = () => {
+      if (isPlaying) {
+        const playPromise = videoEl.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch((err) => console.warn("[loading-overlay] video play blocked (canplay)", err));
+        }
+      }
+    };
+    videoEl.addEventListener("loadeddata", handleCanPlay);
+    return () => {
+      videoEl.removeEventListener("loadeddata", handleCanPlay);
+    };
+  }, [isPlaying, playerSource?.src]);
 
   return (
     <>
@@ -230,6 +256,7 @@ export default function LoadingOverlay() {
                 src={playerSource.src}
                 allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                 allowFullScreen
+                onLoad={sendIframePlayCommand}
                 title="로딩 중 안내 영상"
               ></iframe>
             ))}
