@@ -159,6 +159,7 @@ export default function ResultPage() {
   const [correctCount, setCorrectCount] = useState(0);
   const [showQuitSheet, setShowQuitSheet] = useState(false);
   const [showReSheet, setShowReSheet] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const imgSaveAreaRef = useRef(null);
   const captureAreaRef = useRef(null);
 
@@ -216,6 +217,7 @@ export default function ResultPage() {
   };
 
   useEffect(() => {
+    if (isExiting) return;
     if (!questions || !results || !selectedAnswers || !testInfo) {
       router.replace("/error");
       return;
@@ -285,7 +287,7 @@ export default function ResultPage() {
       setCompleteSent(true);
     }
 
-  }, [questions, results, selectedAnswers, testInfo, router, sessionId, sessionStartedAt, completeSent]);
+  }, [questions, results, selectedAnswers, testInfo, router, sessionId, sessionStartedAt, completeSent, isExiting]);
 
   if (!questions || !results || !selectedAnswers || !testInfo) {
     return null;
@@ -346,6 +348,8 @@ export default function ResultPage() {
   };
 
   const handleConfirmQuit = () => {
+    setIsExiting(true);
+    setShowQuitSheet(false);
     resetSession();
     router.push("/");
   };
