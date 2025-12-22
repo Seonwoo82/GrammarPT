@@ -126,6 +126,14 @@ export default function LoadingOverlay() {
         JSON.stringify({ event: "command", func: "playVideo", args: [] }),
         "*"
       );
+      iframeEl.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "unMute", args: [] }),
+        "*"
+      );
+      iframeEl.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "setVolume", args: [100] }),
+        "*"
+      );
     }
   }, [playerSource]);
 
@@ -215,6 +223,14 @@ export default function LoadingOverlay() {
   }, [isPlaying, playerSource?.type, playerSource?.src]);
 
   useEffect(() => {
+    if (playerSource?.type === "iframe") {
+      // Additional kick for iOS autoplay with audio (best-effort)
+      const timer = setTimeout(sendIframePlayCommand, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [playerSource?.src, playerSource?.type, sendIframePlayCommand]);
+
+  useEffect(() => {
     const videoEl = videoRef.current;
     if (!videoEl) return;
     const handleCanPlay = () => {
@@ -225,9 +241,19 @@ export default function LoadingOverlay() {
         }
       }
     };
+    const handleLoadedMetadata = () => {
+      if (isPlaying) {
+        const playPromise = videoEl.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch((err) => console.warn("[loading-overlay] video play blocked (loadedmetadata)", err));
+        }
+      }
+    };
     videoEl.addEventListener("loadeddata", handleCanPlay);
+    videoEl.addEventListener("loadedmetadata", handleLoadedMetadata);
     return () => {
       videoEl.removeEventListener("loadeddata", handleCanPlay);
+      videoEl.removeEventListener("loadedmetadata", handleLoadedMetadata);
     };
   }, [isPlaying, playerSource?.src]);
 
