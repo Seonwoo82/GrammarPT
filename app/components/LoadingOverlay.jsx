@@ -74,13 +74,17 @@ const resolvePlayerSource = (video) => {
   if (!video) return null;
 
   const platform = (video.platform || "").toLowerCase();
+  const isIOS =
+    typeof navigator !== "undefined" && /iP(hone|od|ad)/.test(navigator.userAgent);
 
   if (platform === "drive" || (video.videoUrl || "").includes("drive.google.com")) {
     const driveId = extractDriveId(video.videoId || video.videoUrl);
     if (!driveId) {
-      return video.videoUrl ? { type: "iframe", src: withAutoplayParams(video.videoUrl, "autoplay=1&controls=0") } : null;
+      return video.videoUrl
+        ? { type: "iframe", src: withAutoplayParams(video.videoUrl, isIOS ? "autoplay=1&controls=0&mute=1" : "autoplay=1&controls=0") }
+        : null;
     }
-    const params = "autoplay=1&controls=0&loop=1";
+    const params = `autoplay=1&controls=0&loop=1${isIOS ? "&mute=1" : ""}`;
     const src = `https://drive.google.com/file/d/${driveId}/preview?${params}`;
     return { type: "iframe", src };
   }
@@ -89,16 +93,16 @@ const resolvePlayerSource = (video) => {
     const youtubeId = extractYoutubeId(video.videoId || video.videoUrl);
     if (!youtubeId) return null;
 
-    const params = `autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${youtubeId}&enablejsapi=1`;
+    const params = `autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${youtubeId}&enablejsapi=1&mute=${isIOS ? 1 : 0}`;
     return { type: "iframe", src: `https://www.youtube.com/embed/${youtubeId}?${params}` };
   }
 
   if (platform === "direct" || /\.mp4($|\?)/.test(video.videoUrl || "")) {
-    return video.videoUrl ? { type: "video", src: video.videoUrl } : null;
+    return video.videoUrl ? { type: "video", src: video.videoUrl, muted: isIOS } : null;
   }
 
   if (video.videoUrl) {
-    return { type: "iframe", src: withAutoplayParams(video.videoUrl) };
+    return { type: "iframe", src: withAutoplayParams(video.videoUrl, isIOS ? "autoplay=1&controls=0&mute=1" : "autoplay=1&controls=0") };
   }
 
   return null;
@@ -224,11 +228,39 @@ export default function LoadingOverlay() {
 
   useEffect(() => {
     if (playerSource?.type === "iframe") {
-      // Additional kick for iOS autoplay with audio (best-effort)
-      const timer = setTimeout(sendIframePlayCommand, 300);
-      return () => clearTimeout(timer);
+      // Additional kicks for iOS autoplay with audio (best-effort)
+      const t1 = setTimeout(sendIframePlayCommand, 300);
+      const t2 = setTimeout(sendIframePlayCommand, 900);
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+      };
     }
   }, [playerSource?.src, playerSource?.type, sendIframePlayCommand]);
+
+  useEffect(() => {
+    const isIOS =
+      typeof navigator !== "undefined" && /iP(hone|od|ad)/.test(navigator.userAgent);
+    if (!isIOS) return;
+    const unlockAudio = () => {
+      setIsPlaying(true);
+      const videoEl = videoRef.current;
+      if (videoEl) {
+        videoEl.muted = false;
+        const playPromise = videoEl.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch((err) => console.warn("[loading-overlay] video play blocked (unlock)", err));
+        }
+      }
+      sendIframePlayCommand();
+    };
+    document.addEventListener("touchstart", unlockAudio, { once: true, passive: true });
+    document.addEventListener("click", unlockAudio, { once: true, passive: true });
+    return () => {
+      document.removeEventListener("touchstart", unlockAudio);
+      document.removeEventListener("click", unlockAudio);
+    };
+  }, [sendIframePlayCommand, playerSource]);
 
   useEffect(() => {
     const videoEl = videoRef.current;
@@ -270,6 +302,7 @@ export default function LoadingOverlay() {
                 className="loading-video-player"
                 src={playerSource.src}
                 autoPlay
+                muted={Boolean(playerSource.muted)}
                 loop
                 playsInline
               />
