@@ -46,7 +46,7 @@ const normalizeVideoRow = (row) => {
   };
 };
 
-const withAutoplayParams = (url, params = "autoplay=1&mute=1&controls=0") => {
+const withAutoplayParams = (url, params = "autoplay=1&controls=0") => {
   if (!url) return url;
   if (url.includes("autoplay=")) return url;
 
@@ -78,9 +78,9 @@ const resolvePlayerSource = (video) => {
   if (platform === "drive" || (video.videoUrl || "").includes("drive.google.com")) {
     const driveId = extractDriveId(video.videoId || video.videoUrl);
     if (!driveId) {
-      return video.videoUrl ? { type: "iframe", src: withAutoplayParams(video.videoUrl, "autoplay=1&mute=1&controls=0") } : null;
+      return video.videoUrl ? { type: "iframe", src: withAutoplayParams(video.videoUrl, "autoplay=1&controls=0") } : null;
     }
-    const params = "autoplay=1&mute=1&controls=0&loop=1";
+    const params = "autoplay=1&controls=0&loop=1";
     const src = `https://drive.google.com/file/d/${driveId}/preview?${params}`;
     return { type: "iframe", src };
   }
@@ -89,7 +89,7 @@ const resolvePlayerSource = (video) => {
     const youtubeId = extractYoutubeId(video.videoId || video.videoUrl);
     if (!youtubeId) return null;
 
-    const params = `autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${youtubeId}&enablejsapi=1`;
+    const params = `autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${youtubeId}&enablejsapi=1`;
     return { type: "iframe", src: `https://www.youtube.com/embed/${youtubeId}?${params}` };
   }
 
@@ -219,7 +219,6 @@ export default function LoadingOverlay() {
                 className="loading-video-player"
                 src={playerSource.src}
                 autoPlay
-                muted
                 loop
                 playsInline
               />
