@@ -8,7 +8,6 @@ import OnCheck from "../components/OnCheck.jsx";
 import { useTestSession } from "../context/TestSessionContext.jsx";
 import { sendTelemetry } from "@/lib/telemetryClient.js";
 
-const backBtn = "/assets/left_btn.png";
 const submitIcon = "/assets/check.png";
 
 export default function TestPage() {
@@ -196,38 +195,45 @@ export default function TestPage() {
     return null;
   }
 
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
+  const isNextDisabled = !selectedAnswers[currentQuestionIndex];
+
   return (
     <div className="test-page">
       <TestHeader />
-      {currentQuestionIndex > 0 && (
-        <div id="back_header_container">
-          <div id="back_header" onClick={handleBack} tabIndex={0} aria-label="이전 문제로 이동">
-            <img src={backBtn} alt="backBtn" id="backBtn" />
-            <p>이전</p>
+      <div className="test-body">
+        <div className="question-nav-bar">
+          <div className="nav-prev">
+            {currentQuestionIndex > 0 ? (
+              <button className="nav-text-button" onClick={handleBack} aria-label="이전 문제로 이동">
+                &lt; 이전
+              </button>
+            ) : (
+              <span />
+            )}
           </div>
+          <button
+            onClick={handleNext}
+            className="nav-text-button nav-text-button-primary"
+            disabled={isNextDisabled}
+            aria-label={isLastQuestion ? "제출하기" : "다음 문제로 이동"}
+          >
+            {isLastQuestion ? (
+              <span className="nav-submit-label">
+                제출
+                <img src={submitIcon} alt="제출" className="submit-icon" />
+              </span>
+            ) : (
+              "다음 >"
+            )}
+          </button>
         </div>
-      )}
-      <QuestionComponent
-        key={currentQuestionIndex}
-        question={questions[currentQuestionIndex]}
-        selectedAnswer={selectedAnswers[currentQuestionIndex]}
-        onAnswerSelect={handleAnswerSelect}
-      />
-      <div className="next-button-container">
-        <button
-          onClick={handleNext}
-          className="next-button-test"
-          disabled={!selectedAnswers[currentQuestionIndex]}
-        >
-          {currentQuestionIndex < questions.length - 1 ? (
-            "다음 문제"
-          ) : (
-            <span>
-              제출
-              <img src={submitIcon} alt="제출" className="submit-icon" />
-            </span>
-          )}
-        </button>
+        <QuestionComponent
+          key={currentQuestionIndex}
+          question={questions[currentQuestionIndex]}
+          selectedAnswer={selectedAnswers[currentQuestionIndex]}
+          onAnswerSelect={handleAnswerSelect}
+        />
       </div>
     </div>
   );

@@ -2,6 +2,51 @@
     position: relative;
     min-height: 100vh;
 }
+
+.test-body {
+    max-width: 980px;
+    margin: 0 auto 48px;
+    padding: 0 16px 32px;
+}
+
+.question-nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0 12px;
+    margin: 0 auto 4px;
+    gap: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.nav-text-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    color: #333333;
+    cursor: pointer;
+    padding: 8px 4px;
+}
+
+.nav-text-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.nav-text-button-primary {
+    color: #E66041;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-submit-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .next-button-container {
     position: fixed;
     right: 16px;
