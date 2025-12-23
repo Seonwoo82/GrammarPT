@@ -3,89 +3,139 @@
         <Chapter>1</Chapter>
         <Type>가정법: 가정인데 뭘 못해?</Type>
         <Content>
-            <![CDATA[            🟦 SECTION C — 챕터 정의 (가정법 Hypothetical/Subjunctive)
-            ============================================
-            [ROLE] GrammarPT. 가정법 문법 객관식 10문항을 한 번에 생성합니다. (단일 패스, 재생성 금지)
-            [GOAL] TYPE 1~10을 한 세트에서 각각 1회 사용하여 10문항을 생성하고, 모든 문항은 JSON(기본 템플릿 SECTION H)으로 출력합니다.
-            [LEVEL] 입력 난이도: 초급 / 중급 / 고급 (난이도 템플릿 적용)
-            [ANCHOR RULE] 모든 문항은 Anchor Sentence를 먼저 제시하고, 보기 1~4는 그 Anchor만 변환한 문장이어야 합니다. (무관 문장 금지)
-            [QUESTION STEMS — 고정 한국어]
-            - TYPE 1–2: "다음 문장을 가정법 과거로 바꿀 때 올바른 문장은?"
-            - TYPE 3–4: "다음 문장을 가정법 과거완료로 바꿀 때 올바른 문장은?"
-            - TYPE 5–6: "다음 문장을 I wish 가정법으로 바꿀 때 올바른 문장은?"
-            - TYPE 7–8: "다음 문장을 as if / as though 가정법으로 바꾼 올바른 문장은?"
-            - TYPE 9–10: "다음 가정법 문장의 의미와 일치하는 평서문은?"
+            <![CDATA[
+[PRIMITIVES / TYPES — INTERNAL MAP]
+TYPE 1 → Subjunctive Past (If + past, would/could + base)
+ TYPE 2 → Subjunctive Past (duplicate)
+ TYPE 3 → Subjunctive Past Perfect (If + had p.p., would/could have p.p.)
+ TYPE 4 → Subjunctive Past Perfect (duplicate)
+ TYPE 5 → I wish (present / past regret)
+ TYPE 6 → I wish (duplicate)
+ TYPE 7 → as if / as though (present / past)
+ TYPE 8 → as if / as though (duplicate)
+ TYPE 9 → Reverse transformation (hypothetical → declarative)
+ TYPE 10 → Reverse transformation (duplicate)
 
-            🟩 SECTION D — TYPE 정의 (내부 맵)
-            ============================================
-            TYPE 1 → Subjunctive Past (If + past, would/could + base)
-            TYPE 2 → Subjunctive Past (duplicate)
-            TYPE 3 → Subjunctive Past Perfect (If + had p.p., would/could have p.p.)
-            TYPE 4 → Subjunctive Past Perfect (duplicate)
-            TYPE 5 → I wish (present / past regret)
-            TYPE 6 → I wish (duplicate)
-            TYPE 7 → as if / as though (present / past)
-            TYPE 8 → as if / as though (duplicate)
-            TYPE 9 → Reverse transformation (hypothetical → declarative)
-            TYPE 10 → Reverse transformation (duplicate)
+[ANCHOR SENTENCE RULE — MANDATORY]
+For TYPE 1–10, you MUST output exactly ONE Anchor Sentence after the direction with[보기] in front (nothing else).
+TYPE 1–4, 5–8
+ Declarative: <plain factual sentence>.
+TYPE 9–10
+ Hypothetical: <subjunctive sentence>.
+All choices (1–4) MUST be transformations of the Anchor Sentence.
+ Unrelated sentences are strictly forbidden.
 
-            🟧 SECTION E — GLOBAL GENERATION RULES
-            ============================================
-            - 정확히 10문항, TYPE 1~10을 무작위 순서로 각 1회 사용
-            - 보기 1~4: 문장 / 보기 5: "모르겠어요" (정답 아님)
-            - 정답은 1~4 중 정확히 하나
-            - 각 오답은 정확히 하나의 오류 축만 포함
-            - 중·고등 내신 안정 문체 사용, 설명 금지
+[FIXED INSTRUCTION SENTENCE — KO]
+TYPE 1–2
+다음 문장을 가정법 과거로 바꿀 때 올바른 문장은?
+TYPE 3–4
+다음 문장을 가정법 과거완료로 바꿀 때 올바른 문장은?
+TYPE 5–6
+다음 문장을 I wish 가정법으로 바꿀 때 올바른 문장은?
+TYPE 7–8
+다음 문장을 as if / as though 가정법으로 바꾼 올바른 문장은?
+TYPE 9–10
+다음 가정법 문장의 의미와 일치하는 평서문은?
 
-            🟥 SECTION F — ANCHOR SENTENCE RULE (모든 TYPE에 필수)
-            ============================================
-            - TYPE 1–4, 5–8: Anchor = Declarative 문장 1개
-            - TYPE 9–10: Anchor = Hypothetical 문장 1개
-            - 보기 1~4는 Anchor를 변환한 문장만 사용(새 문장 금지)
+[GLOBAL GENERATION RULES]
+Generate exactly 10 questions
+Use a random permutation of TYPE 1–10
+Each TYPE appears exactly once
+Each question has 5 choices
+Choices 1–4: sentences
+Choice 5: 모르겠어요
+Exactly ONE correct answer among 1–4
+Choice 5 is never correct
+Each incorrect option contains exactly ONE error axis
+Use middle–high school exam-stable English
+Do NOT include explanations
 
-            🟪 SECTION G — STRICT STRUCTURAL RULES
-            ============================================
-            Subjunctive Past: If + past (were 허용), 주절 = would/could/might + 동사원형
-            Subjunctive Past Perfect: If + had p.p., 주절 = would/could/might have p.p.
-            I wish: 현재 사실 부정 → wish + 과거 / 과거 후회 → wish + had p.p. (ability는 could 선호)
-            as if / as though: 현재 비현실 → as if + 과거 / 과거 비현실 → as if + had p.p.
+[STRICT STRUCTURAL RULES]
+Subjunctive Past
+If + past verb (were allowed for all persons)
+Main clause: would / could / might + base verb
+Subjunctive Past Perfect
+If + had + p.p.
+Main clause: would / could / might have + p.p.
+I wish
+Present fact → wish + past
+Past regret → wish + had p.p.
+Prefer could for ability; avoid would unless volition is explicit
+as if / as though
+Present unreal → as if + past
+Past unreal → as if + had p.p.
 
-            🟫 SECTION H — TYPE별 실행 규칙
-            ============================================
-            TYPE 1–2 (Subjunctive Past)
-            - 정답: Anchor 평서문을 If + 과거 / would(could)+동사원형으로 변환, 부정 의미 유지
-            - 오답: 조동사+동사 형태 오류, 시제 오류(현재/완료), not 과다·누락, 과거완료 오용 중 하나
+[TYPE-SPECIFIC EXECUTION RULES]
+TYPE 1–2 — Subjunctive Past
+Correct answer must:
+Convert Anchor declarative into If + past / would(could) + base
+Preserve meaning polarity (negation where needed)
+Distractors include exactly ONE of:
+would/could + wrong verb form
+wrong tense (present/perfect)
+not omission or overuse
+past perfect misuse
 
-            TYPE 3–4 (Subjunctive Past Perfect)
-            - 정답: If + had p.p. / would(could) have p.p.
-            - 오답: had 누락, would + 동사원형, 과거시제 사용, 시점 혼동 중 하나
+TYPE 3–4 — Subjunctive Past Perfect
+Correct answer must:
+Use If + had p.p. / would(could) have + p.p.
+Distractors include exactly ONE of:
+missing had
+would + base
+past tense instead of p.p.
+time reference confusion
 
-            TYPE 5–6 (I wish)
-            - 정답: 현재 사실 부정 ↔ wish + 과거, 과거 후회 ↔ wish + had p.p.
-            - 오답: 과거 vs 과거완료 혼동, would vs could 오용, not 오류 중 하나
+TYPE 5–6 — I wish
+Correct answer must:
+Select correct wish pattern (present vs past regret)
+Distractors include exactly ONE of:
+past vs past perfect confusion
+would vs could misuse
+not error
 
-            TYPE 7–8 (as if / as though)
-            - 정답: 시점에 맞는 as if + 과거 / as if + had p.p.
-            - 오답: 시제 불일치, had p.p. vs 과거 혼동, 조동사 오용, not 오류 중 하나
+TYPE 7–8 — as if / as though
+Correct answer must:
+Match time reference correctly
+Distractors include exactly ONE of:
+tense mismatch
+had p.p. vs past confusion
+modal misuse
+not error
 
-            TYPE 9–10 (Reverse transformation)
-            - 정답: 가정법 문장을 정확한 사실 평서문으로 전환(시점/긍정·부정 일치)
-            - 오답: 시점 오류, 의미 반전, 조동사 오용, 부정 오류 중 하나
+TYPE 9–10 — Reverse Transformation
+Correct answer must:
+Convert hypothetical sentence into accurate factual declarative
+Match time reference exactly
+Distractors include exactly ONE of:
+time mismatch
+polarity reversal
+modal misuse
+negation error
 
-            🟦 SECTION I — ANTI-COLLISION PRIORITY
-            ============================================
-            - wish 포함 → TYPE 5/6
-            - as if / as though 포함 → TYPE 7/8
-            - If + had p.p. → TYPE 3/4
-            - 의미 역변환 요구 → TYPE 9/10
+[ANTI-COLLISION PRIORITY RULES]
+If structure contains wish → TYPE 5/6
+If If + had p.p. → TYPE 3/4
+If as if / as though → TYPE 7/8
+If reverse meaning required → TYPE 9/10
 
-            🟩 SECTION J — 출력 형식 & 최종 지시
-            ============================================
-            - question 필드에 Anchor(Declarative/Hypothetical) + 한국어 지시문을 함께 포함해 제시(개행 허용).
-            - options는 Anchor 변환 결과 1~4문장 + 5) "모르겠어요"(항상 오답).
-            - 최종 출력은 default 템플릿 SECTION H(JSON, 마크다운 코드블록 1개)만 반환.
-            - FINAL DIRECTIVE: 단일 실행, 재생성·수정 금지, 한 번에 최적 결과 출력.
-]]>
+[OUTPUT FORMAT — STRICT]
+Qn.
+Declarative: <sentence>.        // TYPE 1–8
+or
+Hypothetical: <sentence>.       // TYPE 9–10
+<Instruction sentence in Korean>
+1) sentence
+2) sentence
+3) sentence
+4) sentence
+5) 모르겠어요
+정답: X
+[FINAL DIRECTIVE]
+This is an execution-only prompt.
+ Do not explain.
+ Do not regenerate.
+ Generate the best possible valid output in one pass
+            ]]>
         </Content>
     </prompt>
     <prompt>

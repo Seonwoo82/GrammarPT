@@ -96,14 +96,34 @@ const generatePrompt = (number, chapterType, difficulty) => {
   return promptParts.join("\n");
 };
 
+const cleanJsonCandidate = (raw = "") => {
+  const withoutFences = raw.replace(/```(?:json)?/gi, "").trim();
+  const withoutControlChars = withoutFences.replace(/[\u0000-\u001f]+/g, " ");
+  // remove trailing commas before } or ]
+  return withoutControlChars.replace(/,\s*([}\]])/g, "$1");
+};
+
 const extractQuestionsFromModel = (text) => {
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  const jsonMatch = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
   if (!jsonMatch) {
     throw new Error("유효한 JSON 블록을 찾을 수 없습니다.");
   }
 
-  const jsonText = jsonMatch[0];
-  const parsed = JSON.parse(jsonText);
+  const candidate = cleanJsonCandidate(jsonMatch[0]);
+  let parsed;
+  try {
+    parsed = JSON.parse(candidate);
+  } catch (error) {
+    console.warn("[prompt] JSON.parse 실패, 후처리 재시도", error?.message);
+    // 흔한 파싱 오류를 더 정제해서 한 번 더 시도
+    const fallback = cleanJsonCandidate(candidate.replace(/\\(?!["\\/bfnrtu])/g, "\\\\"));
+    try {
+      parsed = JSON.parse(fallback);
+    } catch (err) {
+      throw new Error(`모델 응답 JSON 파싱 실패: ${err.message}`);
+    }
+  }
+
   if (parsed?.questions) {
     return parsed.questions;
   }
@@ -185,10 +205,15 @@ async function getGeminiResponse(prompt) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY, {
     apiVersion: process.env.GEMINI_API_VERSION?.trim() || "v1beta",
   });
-  const modelName = "gemini-2.5-flash";
+  const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-3-flash-preview";
   const model = genAI.getGenerativeModel({ model: modelName });
   const localizedPrompt = `${prompt}\n\n모든 응답은 한국어로 작성하세요. JSON 형식은 유지하세요.`;
-  const result = await model.generateContent(localizedPrompt);
+  const result = await model.generateContent({
+    contents: [{ role: "user", parts: [{ text: localizedPrompt }] }],
+    generationConfig: {
+      thinking: { level: "low" },
+    },
+  });
   logDuration(`Gemini generateContent (${modelName})`, apiStart);
 
   const content = result?.response?.text()?.trim();
