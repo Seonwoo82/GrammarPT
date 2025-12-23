@@ -210,8 +210,10 @@ async function getGeminiResponse(prompt) {
   const localizedPrompt = `${prompt}\n\n모든 응답은 한국어로 작성하세요. JSON 형식은 유지하세요.`;
   const result = await model.generateContent({
     contents: [{ role: "user", parts: [{ text: localizedPrompt }] }],
-    generationConfig: {
-      thinking: { level: "low" },
+    config: {
+      thinkingConfig: {
+        thinkingLevel: "low",
+      },
     },
   });
   logDuration(`Gemini generateContent (${modelName})`, apiStart);
