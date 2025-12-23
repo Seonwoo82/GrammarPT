@@ -205,7 +205,7 @@ async function getGeminiResponse(prompt) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY, {
     apiVersion: process.env.GEMINI_API_VERSION?.trim() || "v1beta",
   });
-  const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-3-flash-preview";
+  const modelName = (process.env.GEMINI_MODEL || "").trim() || "gemini-3-flash-preview";
   const model = genAI.getGenerativeModel({ model: modelName });
   const localizedPrompt = `${prompt}\n\n모든 응답은 한국어로 작성하세요. JSON 형식은 유지하세요.`;
   const result = await model.generateContent({

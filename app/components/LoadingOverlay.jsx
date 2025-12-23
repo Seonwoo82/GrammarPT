@@ -227,32 +227,36 @@ export default function LoadingOverlay() {
   }, [isPlaying, playerSource?.type, playerSource?.src]);
 
   useEffect(() => {
-    if (playerSource?.type === "iframe") {
-      // Additional kicks for iOS autoplay with audio (best-effort)
-      const t1 = setTimeout(sendIframePlayCommand, 300);
-      const t2 = setTimeout(sendIframePlayCommand, 900);
-      return () => {
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
-    }
-  }, [playerSource?.src, playerSource?.type, sendIframePlayCommand]);
+    if (playerSource?.type !== "iframe" || !isPlaying) return;
+    // Additional kicks for iOS autoplay with audio (best-effort)
+    const t1 = setTimeout(() => {
+      if (isPlaying) sendIframePlayCommand();
+    }, 300);
+    const t2 = setTimeout(() => {
+      if (isPlaying) sendIframePlayCommand();
+    }, 900);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [playerSource?.src, playerSource?.type, isPlaying, sendIframePlayCommand]);
 
   useEffect(() => {
     const isIOS =
       typeof navigator !== "undefined" && /iP(hone|od|ad)/.test(navigator.userAgent);
     if (!isIOS) return;
     const unlockAudio = () => {
-      setIsPlaying(true);
       const videoEl = videoRef.current;
-      if (videoEl) {
+      if (videoEl && isPlaying) {
         videoEl.muted = false;
         const playPromise = videoEl.play();
         if (playPromise && typeof playPromise.catch === "function") {
           playPromise.catch((err) => console.warn("[loading-overlay] video play blocked (unlock)", err));
         }
       }
-      sendIframePlayCommand();
+      if (isPlaying) {
+        sendIframePlayCommand();
+      }
     };
     document.addEventListener("touchstart", unlockAudio, { once: true, passive: true });
     document.addEventListener("click", unlockAudio, { once: true, passive: true });
@@ -260,7 +264,7 @@ export default function LoadingOverlay() {
       document.removeEventListener("touchstart", unlockAudio);
       document.removeEventListener("click", unlockAudio);
     };
-  }, [sendIframePlayCommand, playerSource]);
+  }, [sendIframePlayCommand, isPlaying]);
 
   useEffect(() => {
     const videoEl = videoRef.current;
