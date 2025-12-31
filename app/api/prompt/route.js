@@ -9,8 +9,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export const runtime = "nodejs";
 
 let promptCache = null;
+let promptCacheMtime = null;
 let commonPromptCache = null;
+let commonPromptCacheMtime = null;
 let difficultyPromptCache = null;
+let difficultyPromptCacheMtime = null;
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -20,11 +23,13 @@ const parser = new XMLParser({
 const getDataPath = (file) => path.join(process.cwd(), "data", file);
 
 const loadPrompts = () => {
-  if (promptCache) {
+  const promptPath = getDataPath("prompts.xml");
+  const { mtimeMs } = fs.statSync(promptPath);
+  if (promptCache && promptCacheMtime === mtimeMs) {
     return promptCache;
   }
 
-  const xmlContent = fs.readFileSync(getDataPath("prompts.xml"), "utf-8");
+  const xmlContent = fs.readFileSync(promptPath, "utf-8");
   const parsed = parser.parse(xmlContent);
   const promptListRaw = parsed?.prompts?.prompt || [];
   const promptList = Array.isArray(promptListRaw) ? promptListRaw : [promptListRaw];
@@ -37,26 +42,32 @@ const loadPrompts = () => {
     promptCache.set(key, item.Content?.trim() || "");
   });
 
+  promptCacheMtime = mtimeMs;
   return promptCache;
 };
 
 const loadCommonPrompt = () => {
-  if (commonPromptCache) {
+  const defaultPath = getDataPath("default.yaml");
+  const { mtimeMs } = fs.statSync(defaultPath);
+  if (commonPromptCache && commonPromptCacheMtime === mtimeMs) {
     return commonPromptCache;
   }
 
-  const yamlContent = fs.readFileSync(getDataPath("default.yaml"), "utf-8");
+  const yamlContent = fs.readFileSync(defaultPath, "utf-8");
   const data = yaml.load(yamlContent);
   commonPromptCache = data?.template || "공통 프롬프트";
+  commonPromptCacheMtime = mtimeMs;
   return commonPromptCache;
 };
 
 const loadDifficultyPrompts = () => {
-  if (difficultyPromptCache) {
+  const difficultyPath = getDataPath("difficulty.yaml");
+  const { mtimeMs } = fs.statSync(difficultyPath);
+  if (difficultyPromptCache && difficultyPromptCacheMtime === mtimeMs) {
     return difficultyPromptCache;
   }
 
-  const yamlContent = fs.readFileSync(getDataPath("difficulty.yaml"), "utf-8");
+  const yamlContent = fs.readFileSync(difficultyPath, "utf-8");
   const data = yaml.load(yamlContent);
   const levels = data?.levels || {};
 
@@ -65,6 +76,7 @@ const loadDifficultyPrompts = () => {
     difficultyPromptCache.set(String(level).trim(), (template || "").trim());
   });
 
+  difficultyPromptCacheMtime = mtimeMs;
   return difficultyPromptCache;
 };
 
