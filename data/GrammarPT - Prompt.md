@@ -1,8 +1,4 @@
-<prompts>
-  <prompt>
-    <Chapter>2</Chapter>
-    <Type>문장의 재료</Type>
-    <Content><![CDATA[# **GrammarPT — 문법 첫걸음 \- 문장의 재료**
+# **GrammarPT — 문법 첫걸음 \- 문장의 재료**
 
 ## **Execution Slim Prompt (Production v1.0)**
 
@@ -259,12 +255,11 @@ Allowed error axes:
 This is an **execution-only** prompt.  
  Do not explain.  
  Do not regenerate.  
- Generate the **best possible valid output in one pass**.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>2</Chapter>
-    <Type>동사: 자냐 타냐</Type>
-    <Content><![CDATA[# **GrammarPT — 문법 첫걸음 \- 동사 : 자냐 타냐**
+ Generate the **best possible valid output in one pass**.
+
+# 
+
+# **GrammarPT — 문법 첫걸음 \- 동사 : 자냐 타냐**
 
 ## **Execution Slim Prompt (Production v1.0)**
 
@@ -501,12 +496,9 @@ TYPE 9–10
 This is an **execution-only** prompt.  
  Do not explain.  
  Do not regenerate.  
- Generate the **best possible valid output in one pass**.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>2</Chapter>
-    <Type>문장의 생김새</Type>
-    <Content><![CDATA[# **GrammarPT — 문법 첫걸음 \- 문장의 생김새**
+ Generate the **best possible valid output in one pass**.
+
+# **GrammarPT — 문법 첫걸음 \- 문장의 생김새**
 
 ## **Execution Slim Prompt (Production v1.0)**
 
@@ -734,12 +726,9 @@ Allowed error axes:
 This is an **execution-only** prompt.  
  Do not explain.  
  Do not regenerate.  
- Generate the **best possible valid output in one pass**.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>3</Chapter>
-    <Type>동사로 표현하는 시제</Type>
-    <Content><![CDATA[# **GrammarPT — 코어 문법 강화 \- 동사로 표현하는 시제**
+ Generate the **best possible valid output in one pass**.
+
+# **GrammarPT — 코어 문법 강화 \- 동사로 표현하는 시제**
 
 GrammarPT — Tense Module
 
@@ -1084,12 +1073,11 @@ Do not explain.
 
 Do not regenerate.
 
-Generate the best possible valid output in one pass.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>3</Chapter>
-    <Type>명사와 불친절한 관사</Type>
-    <Content><![CDATA[# **GrammarPT — 코어 문법 강화 \- 명사와 불친절한 관사**
+Generate the best possible valid output in one pass.
+
+# 
+
+# **GrammarPT — 코어 문법 강화 \- 명사와 불친절한 관사**
 
 ## **Execution Slim Prompt (Production v1.0)**
 
@@ -1355,12 +1343,9 @@ Allowed error axes:
 This is an **execution-only** prompt.  
  Do not explain.  
  Do not regenerate.  
- Generate the **best possible valid output in one pass**.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>3</Chapter>
-    <Type>대명사는 대신맨</Type>
-    <Content><![CDATA[# **GrammarPT — 코어 문법 강화 \- 대명사는 대신맨**
+ Generate the **best possible valid output in one pass**.
+
+# **GrammarPT — 코어 문법 강화 \- 대명사는 대신맨**
 
 SECTION A — Ontology Summary (Concise)
 
@@ -1548,12 +1533,13 @@ B) Proportional Expressions
  Execution only.  
  No explanations.  
  No regeneration.  
- Produce the best possible valid output in one pass.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>3</Chapter>
-    <Type>묘사의 달인 형용사</Type>
-    <Content><![CDATA[# **GrammarPT — 코어 문법 강화 \- 묘사의 달인 형용사**
+ Produce the best possible valid output in one pass.
+
+# 
+
+# 
+
+# **GrammarPT — 코어 문법 강화 \- 묘사의 달인 형용사**
 
 # **GrammarPT — Comparative · Superlative · Participle Adjectives**
 
@@ -1799,12 +1785,11 @@ RULE 5 (Q9–Q10)
 Execution only.  
  No explanations.  
  No regeneration.  
- Produce the best possible valid output in one pass.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>3</Chapter>
-    <Type>다 도와줄게 부사</Type>
-    <Content><![CDATA[# **GrammarPT — 코어 문법 강화 \- 다 도와줄게 부사**
+ Produce the best possible valid output in one pass.
+
+# 
+
+# **GrammarPT — 코어 문법 강화 \- 다 도와줄게 부사**
 
 # **GrammarPT — Adverbs**
 
@@ -2017,12 +2002,11 @@ Constraints:
 Execution only.  
  No explanations.  
  No regeneration.  
- Produce the **best possible valid output in one pass**.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>1</Chapter>
-    <Type>부정사는 용법이지</Type>
-    <Content><![CDATA[# **GrammarPT — 내신꿀팁 \- 부정사는 용법이지**
+ Produce the **best possible valid output in one pass**.
+
+# 
+
+# **GrammarPT — 내신꿀팁 \- 부정사는 용법이지**
 
 ## **SECTION B — GrammarPT Execution Slim Prompt (FINAL · 3-Key Anti-Pattern)**
 
@@ -2140,12 +2124,9 @@ Distractors: same structure but correct prepositions.
 
 ### **FINAL EXECUTION DIRECTIVE**
 
-Generate the full 10-question set now, once, strictly following the rules above.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>1</Chapter>
-    <Type>동사 품은 명사: 동명사</Type>
-    <Content><![CDATA[# **GrammarPT — 내신꿀팁 \- 동사 품은 명사 : 동명사**
+Generate the full 10-question set now, once, strictly following the rules above.
+
+# **GrammarPT — 내신꿀팁 \- 동사 품은 명사 : 동명사**
 
 # **GrammarPT — Gerund Module**
 
@@ -2380,12 +2361,11 @@ Qn. (Instruction in Korean)
 This is an **execution-only** prompt.  
  Do not explain.  
  Do not regenerate.  
- Generate the **best possible valid output in one pass**.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>1</Chapter>
-    <Type>동사 품은 형용사: 분사</Type>
-    <Content><![CDATA[# **GrammarPT — 내신꿀팁 \- 동사 품은 형용사: 분사**
+ Generate the **best possible valid output in one pass**.
+
+# 
+
+# **GrammarPT — 내신꿀팁 \- 동사 품은 형용사: 분사**
 
 # **SECTION B — GrammarPT Execution Slim Prompt (FINAL)**
 
@@ -2556,12 +2536,11 @@ Q1→4, Q2→2, Q3→3, Q4→1, Q5→4, Q6→2, Q7→3, Q8→1, Q9→4, Q10→2
 
 * # **Ensure exactly one correct answer among 1–4.** 
 
-# **\[FINAL DIRECTIVE\]**  **This is an execution-only prompt.**  **Do not explain.**  **Do not regenerate.**  **Generate the best possible valid output in one pass.**]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>1</Chapter>
-    <Type>능수능란: 수동태</Type>
-    <Content><![CDATA[# **GrammarPT — 내신꿀팁 \- 능수능란: 수동태**
+# **\[FINAL DIRECTIVE\]**  **This is an execution-only prompt.**  **Do not explain.**  **Do not regenerate.**  **Generate the best possible valid output in one pass.**
+
+# 
+
+# **GrammarPT — 내신꿀팁 \- 능수능란: 수동태**
 
 ## **SECTION B — GrammarPT Execution Slim Prompt (FINAL)**
 
@@ -2796,12 +2775,9 @@ Distractors: each uses EXACTLY ONE from E-BANK subset:
 
 \[FINAL DIRECTIVE\]  
  This is an execution-only prompt.  
- Do not explain. Do not regenerate. Generate the best possible valid output in one pass.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>1</Chapter>
-    <Type>선행사 바라기: 관계대명사</Type>
-    <Content><![CDATA[# **GrammarPT — 내신꿀팁 \- 선행사 바라기 : 관계대명사**
+ Do not explain. Do not regenerate. Generate the best possible valid output in one pass.
+
+# **GrammarPT — 내신꿀팁 \- 선행사 바라기 : 관계대명사**
 
 # **GrammarPT — Relative Clause**
 
@@ -3085,12 +3061,9 @@ This is an execution-only prompt.
  Do not regenerate.  
  Do not self-correct.
 
-Generate the **best possible valid output in one pass**.]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>1</Chapter>
-    <Type>가정법: 가정인데 뭘 못해?</Type>
-    <Content><![CDATA[# **GrammarPT — 내신꿀팁 \- 가정법: 가정인데 뭘 못해?**
+Generate the **best possible valid output in one pass**.
+
+# **GrammarPT — 내신꿀팁 \- 가정법: 가정인데 뭘 못해?**
 
 **\[ROLE\]** You are GrammarPT. Your task is to generate English hypothetical (subjunctive) grammar multiple-choice questions according to the rules below. This is a single-pass execution prompt. Do NOT regenerate, revise, discard, or retry sentences internally. Do NOT include explanations.
 
@@ -3181,12 +3154,11 @@ Generate the **best possible valid output in one pass**.]]></Content>
 
 **\[FINAL DIRECTIVE\]**  
  **This is an execution-only prompt.**  
- **Do not explain. Do not regenerate. Generate the best possible valid output in one pass.**]]></Content>
-  </prompt>
-  <prompt>
-    <Chapter>1</Chapter>
-    <Type>특이해서 특수문법: 도치와 강조</Type>
-    <Content><![CDATA[# **GrammarPT — 내신꿀팁 \- 특이해서 특수문법 : 도치와 강조**
+ **Do not explain. Do not regenerate. Generate the best possible valid output in one pass.**
+
+# 
+
+# **GrammarPT — 내신꿀팁 \- 특이해서 특수문법 : 도치와 강조**
 
 ## **SECTION B — GrammarPT Execution Slim Prompt (FINAL)**
 
@@ -3385,6 +3357,5 @@ Distractors (each exactly one):
 \[FINAL DIRECTIVE\]  
  This is an execution-only prompt.  
  Do not explain. Do not regenerate.  
- Generate the best possible valid output in one pass.]]></Content>
-  </prompt>
-</prompts>
+ Generate the best possible valid output in one pass.
+

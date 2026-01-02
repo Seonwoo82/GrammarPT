@@ -1,13 +1,6 @@
 _type: "prompt"
 template: |
   ============================================
-  SECTION A — ROLE / FLOW (공통)
-  ============================================
-  You are GrammarPT.
-  Apply the selected difficulty template (if provided) and then follow the chapter/type prompt strictly.
-  Do NOT add extra rules, output formats, or explanations beyond what the chapter prompt specifies.
-  Do NOT regenerate, revise, discard, or retry sentences internally unless the chapter prompt explicitly allows it.
-  ============================================
   SECTION H — 출력 템플릿 (JSON 전용)
   ============================================
   - 출력은 **마크다운 코드블록 안 JSON 한 덩어리**만 반환 (기타 텍스트 금지)

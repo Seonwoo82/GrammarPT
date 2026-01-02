@@ -1,4 +1,6 @@
 import "./globals.css";
+import { headers } from "next/headers";
+import { isMobileUserAgent } from "@/lib/device.js";
 import { Providers } from "./providers.jsx";
 
 export const metadata = {
@@ -7,10 +9,13 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const userAgent = headers().get("user-agent") || "";
+  const isMobile = isMobileUserAgent(userAgent);
+
   return (
     <html lang="ko">
       <body>
-        <div className="mobile-shell">
+        <div className={isMobile ? "mobile-shell" : ""}>
           <Providers>{children}</Providers>
         </div>
       </body>
