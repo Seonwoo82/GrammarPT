@@ -166,7 +166,7 @@ export default function LandingPage() {
       <section className="landing-second-section">
         <div className="landing-content">
           <h2 className="landing-second-section-title">
-            더 이상 <span className="highlight"><span>문제 찾아 삼만리 </span></span>하지 마세요.
+            더 이상 <span className="highlight"><span>문제 찾아 "삼만리" </span></span>하지 마세요.
           </h2>
           <div className="experience-box">
             <div className="experience-left">
@@ -285,9 +285,13 @@ export default function LandingPage() {
       </section>
       <section className="recommend-section">
         <p className="recommend-small-text">
-          시중 자료의 한계, AI의 막연한 불안감... 그 틈을 메우기 위해 시작했습니다.<br/>
-          기존 AI의 한계를 넘어, 직접 검증하고 설계한 엔진입니다. <br/>
-          GrammarPT의 가장 까다로운 첫 사용자는 바로 저였습니다.
+          <em className="recommend-small-text-italic">
+            시중 자료의 한계, AI의 막연한 불안감... 그 틈을 메우기 위해 시작했습니다.<br/>
+            기존 AI의 한계를 넘어, 직접 검증하고 설계한 엔진입니다.
+          </em>
+          <span className="recommend-small-text-note">
+            GrammarPT의 가장 까다로운 첫 사용자는 바로 저였습니다.
+          </span>
         </p>
 
         <div className="divider-line"></div>
@@ -335,9 +339,6 @@ export default function LandingPage() {
               상담을 통해 GrammarPT에 대해 더 자세히 알아보실 수 있어요.
             </p>
           </div>
-          <button className="inquiry-button" onClick={handleInquiryOpen}>
-            도입 문의
-          </button>
         </div>
       </div>
 

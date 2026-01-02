@@ -66,7 +66,7 @@
 .landing-first-section-title {
   color: #111827;
   font-family: 'SUIT', sans-serif;
-  font-size: 50px;
+  font-size: 58px;
   font-weight: bold;
   line-height: 150%;
   letter-spacing: -2.5%;
@@ -74,7 +74,7 @@
 }
 
 .landing-first-section-subtitle {
-  color: #8a8a8a;
+  color: #414141;
   font-family: 'SUIT', sans-serif;
   font-size: 18px;
   font-weight: 500;
@@ -297,7 +297,7 @@
 .banner-text-primary {
   font-size: 34px;
   font-weight: bold;
-  opacity: 0.8;
+  opacity: 0.9;
   margin-bottom: 16px;
 }
 
@@ -324,7 +324,7 @@
 .banner-text-primary {
   font-size: 24px;
   font-weight: bold;
-  opacity: 0.8;
+  opacity: 0.9;
   margin-bottom: 16px;
   color: #fff;
 }
@@ -629,7 +629,7 @@
 }
 
 .mockup-description {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 500;
   line-height: 1.5;
   color: #333;
@@ -644,6 +644,16 @@
   color: #000000;
   font-size: 24px;
   margin-bottom: 20px;
+}
+
+.recommend-small-text-italic {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.recommend-small-text-note {
+  display: block;
+  font-weight: bold;
 }
 
 .recommend-title {
@@ -694,7 +704,7 @@
 }
 
 .recommend-text {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .recommend-text strong {
@@ -1332,11 +1342,11 @@
 }
 
 .landing-first-section-title {
-  font-size: clamp(24px, 5vw, 40px);
+  font-size: clamp(24px, 5vw, 48px);
 }
 
 .landing-first-section-subtitle {
-  font-size: clamp(16px, 3vw, 20px);
+  font-size: clamp(16px, 3vw, 22px);
 }
 
 /* 이미지 반응형 처리 */
