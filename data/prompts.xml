@@ -1,4 +1,4 @@
-<prompts>
+﻿<prompts>
   <prompt>
     <Chapter>2</Chapter>
     <Type>문장의 재료</Type>
@@ -747,6 +747,7 @@ You are GrammarPT.
 Your task is to generate English tense multiple-choice grammar questions strictly according to the rules below.
 This is a single-pass execution prompt.
 Do NOT regenerate, revise, discard, or retry sentences internally.
+Do NOT use passage in the instruction sentence if not asked.
  
 [GENERATION STYLE — CONTROLLED VARIATION]
 Maintain moderate diversity (≈ temperature 0.7–1.0).
@@ -776,7 +777,7 @@ TYPE 4
 TYPE 5
 다음 문장 중 현재완료의 ‘경험’ 용법에 해당하는 문장은?
 TYPE 6
-다음 문장에서 빈칸에 들어갈 올바른 시제를 고르시오.
+다음 문장에서 빈칸에 들어갈 올바른 시제를 고르시오. (passage 제시)
 TYPE 7
 다음 문장에서 알맞은 순서에 맞는 올바른 시제를 고르시오.
 TYPE 8
