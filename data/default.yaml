@@ -9,10 +9,11 @@ template: |
     - index: 1~10
     - grammar_type: SECTION D TYPE 번호(1~10)
     - question: 한국어 지시문
+    - passage: 지문
+    - passage_kor: 지문 한국어
     - options: 5개 문자열(1~4 보기, 5는 항상 "모르겠어요")
     - answer: 정답 보기(텍스트 그대로)
     - vocabulary: 어휘 설명
     - explanation: 정답 근거 + 틀린 선지 반례 설명
-  - `passage`/`passage_kor` 필드는 사용하지 않음 (지문 없음)
   - 줄바꿈은 `<br/>`로 대체
   - 한국어로 답변
