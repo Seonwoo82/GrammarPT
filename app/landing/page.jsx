@@ -33,6 +33,11 @@ export default function LandingPage() {
 
   const faqs = [
     {
+      question: "GrammarPT도 문제은행 방식인가요?",
+      answer:
+        "아닙니다. GrammarPT는 모든 문장을 AI가 생성하며, 자체 출제 검증 엔진(특허출원 제 4-1-2025-5372016-42호)으로 검증-채점-해설이 이루어지는 순수 생성형 AI문항 시스템입니다.",
+    },
+    {
       question: "오픈베타는 언제까지인가요?",
       answer:
         "현재는 오픈베타로 운영 중이며, 2026년 3월 정식 전환을 목표로 준비하고 있습니다. 일정은 변동될 수 있으며 변동 시 사전 공지합니다.",
@@ -339,6 +344,9 @@ export default function LandingPage() {
               상담을 통해 GrammarPT에 대해 더 자세히 알아보실 수 있어요.
             </p>
           </div>
+          <button className="inquiry-button" onClick={handleInquiryOpen}>
+            문의 (Q&amp;A)
+          </button>
         </div>
       </div>
 
